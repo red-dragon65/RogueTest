@@ -18,6 +18,7 @@ public class Dungeon {
     boolean finished = false;
 
 
+
     /*
     Default constructor.
      */
@@ -47,7 +48,6 @@ public class Dungeon {
         //Right
         if (input[0] && !input[1])
             hero.setVx(5);
-
         //Left
         if (input[1] && !input[0])
             hero.setVx(-5);

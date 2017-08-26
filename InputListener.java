@@ -9,8 +9,8 @@ import java.awt.event.KeyEvent;
  */
 public class InputListener extends KeyAdapter {
 
+    //Hold input values.
     private boolean input[] = new boolean[4];
-
 
     /*
      * Event that occurs when the user presses a key.
@@ -58,6 +58,7 @@ public class InputListener extends KeyAdapter {
     }
 
 
+    //Return input values.
     public boolean[] getInput() {
         return input;
     }

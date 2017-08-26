@@ -64,8 +64,6 @@ public class Loop extends JPanel implements ActionListener {
      */
     private void initializeSprites() {
 
-        //input = new InputListener();
-
         dungeon = new Dungeon();
     }
 
@@ -84,6 +82,9 @@ public class Loop extends JPanel implements ActionListener {
 
 
     //TODO: Make this skip frame if necessary
+    /*
+    Skip frames if necessary.
+     */
     private void render() {
         repaint();
     }
@@ -106,49 +107,5 @@ public class Loop extends JPanel implements ActionListener {
 
 
     }
-
-
-    /**
-     * Class that reads keyboard input for moving.
-
-     public class KeyPressing extends KeyAdapter {
-
-     public void keyPressed(KeyEvent e) {
-     switch (e.getKeyCode()) {
-     case KeyEvent.VK_RIGHT:
-     input[0] = true;
-     break;
-     case KeyEvent.VK_LEFT:
-     input[1] = true;
-     break;
-     case KeyEvent.VK_UP:
-     input[2] = true;
-     break;
-     case KeyEvent.VK_DOWN:
-     input[3] = true;
-     break;
-     case KeyEvent.VK_SPACE:
-     break;
-     }
-     }
-
-
-     public void keyReleased(KeyEvent e) {
-     switch (e.getKeyCode()) {
-     case KeyEvent.VK_RIGHT:
-     input[0] = false;
-     break;
-     case KeyEvent.VK_LEFT:
-     input[1] = false;
-     break;
-     case KeyEvent.VK_UP:
-     input[2] = false;
-     break;
-     case KeyEvent.VK_DOWN:
-     input[3] = false;
-     break;
-     }
-     }
-     }*/
 /////
 }
