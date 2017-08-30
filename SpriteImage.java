@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 
-abstract class SpriteImage extends Sprite {
+public class SpriteImage extends Sprite {
 
     //Set sprite image
     protected ImageIcon IMAGE;

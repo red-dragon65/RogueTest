@@ -11,11 +11,15 @@ public class Dungeon {
 
     //Sprites.
     private Hero hero;
+    private Hero stairs;
 
     //Sprite images.
     private ImageIcon heroImg;
+    private ImageIcon stairsImg;
 
     boolean finished = false;
+
+    int[] temp;
 
 
 
@@ -27,17 +31,17 @@ public class Dungeon {
         map = new Map();
 
         hero = new Hero(10);
+        stairs = new Hero(10);
 
         heroImg = new ImageIcon(getClass().getResource("Assets/hero.png"));
+        stairsImg = new ImageIcon(getClass().getResource("test/point.png"));
 
         //Set hero image.
         hero.setIMAGE(heroImg);
+        stairs.setIMAGE(stairsImg);
 
-        int[] temp = map.getRandomRoom();
-
-        //Set hero starting location.
-        hero.setX(temp[0]);
-        hero.setY(temp[1]);
+        randomLoc(hero);
+        randomLoc(stairs);
     }
 
 
@@ -71,6 +75,13 @@ public class Dungeon {
         //Update hero location
         hero.move();
 
+        if (hero.isCollision(stairs)) {
+            map.init();
+
+            randomLoc(hero);
+            randomLoc(stairs);
+        }
+
     }
 
 
@@ -86,8 +97,20 @@ public class Dungeon {
             }
         }
 
+        stairs.paint(g, p);
+
         //Draw hero
         hero.paint(g, p);
+
+    }
+
+
+    private void randomLoc(Hero h) {
+
+        temp = map.getRandomRoom();
+        //Set hero starting location.
+        h.setX(temp[0]);
+        h.setY(temp[1]);
     }
 
 }
