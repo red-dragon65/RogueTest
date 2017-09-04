@@ -24,6 +24,7 @@ public class Loop extends JPanel implements ActionListener {
 
     //Maps
     private Dungeon dungeon;
+    private Town town;
 
     InputListener input;
 
@@ -64,6 +65,7 @@ public class Loop extends JPanel implements ActionListener {
      */
     private void initializeSprites() {
 
+        town = new Town();
         dungeon = new Dungeon();
     }
 
@@ -73,7 +75,28 @@ public class Loop extends JPanel implements ActionListener {
      */
     public void actionPerformed(ActionEvent e) {
 
-        dungeon.run(input.getInput());
+        //TODO: remove old code
+        //dungeon.run(input.getInput());
+        //town.run(input.getInput());
+
+
+        if (town.townRun)
+            town.run(input.getInput());
+        else {
+            if (dungeon.dungeonFinished) {
+                dungeon.init();
+            } else {
+
+                dungeon.run(input.getInput());
+                dungeon.checkDungeon();
+                town.townRun = dungeon.dungeonFinished;
+
+                if (town.townRun) {
+                    town.init();
+                }
+
+            }
+        }
 
 
         //refreshes the screen.
@@ -102,8 +125,14 @@ public class Loop extends JPanel implements ActionListener {
         Toolkit.getDefaultToolkit().sync();
 
 
+
         //Draw dungeon to panel
-        dungeon.draw(g, this);
+        if (town.townRun) {
+            town.draw(g, this);
+        } else {
+            if (dungeon != null)
+                dungeon.draw(g, this);
+        }
 
 
     }

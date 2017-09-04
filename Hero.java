@@ -54,7 +54,7 @@ public class Hero extends Enemy {
      * Methods.TODO: remove collision methods
      */
     //Method to check for collisions.
-    public boolean isCollision(Enemy other) {
+    public boolean isCollision(SpriteImage other) {
 
         Rectangle thisSprite = new Rectangle(getX(), getY(), getWidth(), getHeight());
         Rectangle otherSprite = new Rectangle(other.getX(), other.getY(), other.getWidth(), other.getHeight());
