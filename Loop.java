@@ -80,6 +80,7 @@ public class Loop extends JPanel implements ActionListener {
         //town.run(input.getInput());
 
 
+        //Decide which game logic to run.
         if (town.townRun)
             town.run(input.getInput());
         else {
@@ -124,9 +125,7 @@ public class Loop extends JPanel implements ActionListener {
         //Stop linux lagging.
         Toolkit.getDefaultToolkit().sync();
 
-
-
-        //Draw dungeon to panel
+        //Decide which game area to paint.
         if (town.townRun) {
             town.draw(g, this);
         } else {

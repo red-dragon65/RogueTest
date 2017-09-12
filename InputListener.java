@@ -10,7 +10,7 @@ import java.awt.event.KeyEvent;
 public class InputListener extends KeyAdapter {
 
     //Hold input values.
-    private boolean input[] = new boolean[4];
+    private boolean input[] = new boolean[6];
 
     /*
      * Event that occurs when the user presses a key.
@@ -31,6 +31,10 @@ public class InputListener extends KeyAdapter {
                 input[3] = true;
                 break;
             case KeyEvent.VK_SPACE:
+                input[4] = true;
+                break;
+            case KeyEvent.VK_ESCAPE:
+                input[5] = true;
                 break;
         }
     }
@@ -53,6 +57,12 @@ public class InputListener extends KeyAdapter {
                 break;
             case KeyEvent.VK_DOWN:
                 input[3] = false;
+                break;
+            case KeyEvent.VK_SPACE:
+                input[4] = false;
+                break;
+            case KeyEvent.VK_ESCAPE:
+                input[5] = false;
                 break;
         }
     }

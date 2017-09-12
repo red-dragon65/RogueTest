@@ -51,7 +51,7 @@ public class Hero extends Enemy {
 
 
     /*
-     * Methods.TODO: remove collision methods
+     * Methods.TODO: remove collision methods?
      */
     //Method to check for collisions.
     public boolean isCollision(SpriteImage other) {
