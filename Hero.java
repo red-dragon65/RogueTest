@@ -10,6 +10,8 @@ public class Hero extends Enemy {
 
     private int exp = 0;
 
+    private int speed = 5;
+
     /*
      * Default constructor.
      */
@@ -18,12 +20,81 @@ public class Hero extends Enemy {
     }
 
 
+
     //Move with bounds.
-    protected void moveInBounds() {
+    protected void moveInBounds(boolean in[]) {
+
+        //Right
+        if (in[0] && !in[1])
+            this.setVx(speed);
+        //Left
+        if (in[1] && !in[0])
+            this.setVx(-speed);
+
+        //Stop moving
+        if (!in[0] && !in[1])
+            this.setVx(0);
+
+
+        //Up
+        if (in[2] && !in[3])
+            this.setVy(-speed);
+
+        //Down
+        if (in[3] && !in[2])
+            this.setVy(speed);
+
+        //Stop moving
+        if (!in[2] && !in[3])
+            this.setVy(0);
+
         move();
 
 
     }
+
+    /*
+
+    protected void move(input, collisionMap){
+
+
+
+
+        //Check for damage
+        if(collisionMap.attack = this.loc){
+            collisionMap.attack = null;
+
+            while(damage not done)
+                damage.animate()
+        }
+
+
+
+
+        //Either attack or move
+        if(this.attack){
+
+            //Set attack
+            collisionMap.[hero + direction] = attack;
+
+            while(attack not done)
+                attack.animate()
+
+        }else{
+
+            //Move a tile
+            while(moving not done)
+                this.move()
+        }
+
+
+        //Stop focus
+        done = true
+
+
+    }
+
+     */
 
 
     public int getHealth() {

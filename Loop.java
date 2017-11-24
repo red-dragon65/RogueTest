@@ -19,7 +19,7 @@ import java.awt.event.ActionListener;
 public class Loop extends JPanel implements ActionListener {
 
 
-    //Gameloop
+    //Game loop
     private Timer gameLoop;
 
     //Maps

@@ -3,6 +3,7 @@ package RogueGame;
 import javax.swing.*;
 import java.awt.*;
 
+
 public class Dungeon {
 
 
@@ -20,8 +21,6 @@ public class Dungeon {
     public boolean dungeonFinished;
     private int maxFloors;
     private int currentFloor;
-    private int speed;
-
 
 
 
@@ -46,22 +45,16 @@ public class Dungeon {
 
         init();
 
-        speed = 5;
-
     }
 
+    //Re-initializer
     public void init() {
-        //map.init();
+
 
         randomLoc(stairs);
         do {
             randomLoc(hero);
         } while (stairs.getX() == hero.getX() && stairs.getY() == hero.getY());
-        //randomLoc(hero);
-/*
-        if(hero.getX() == stairs.getX())
-            hero.setX(hero.getX()+1);
-*/
 
         maxFloors = 2;
         currentFloor = 1;
@@ -69,47 +62,32 @@ public class Dungeon {
         dungeonFinished = false;
     }
 
+    //Generate next floor
+    private void newFloor() {
+
+        map.init();
+
+        randomLoc(stairs);
+        do {
+            randomLoc(hero);
+        } while (stairs.getX() == hero.getX() && stairs.getY() == hero.getY());
+
+        currentFloor++;
+    }
+
+
     //Game loop calls this function.
-    public void run(boolean input[]) {
+    public void run(boolean in[]) {
 
 
-        //Right
-        if (input[0] && !input[1])
-            hero.setVx(speed);
-        //Left
-        if (input[1] && !input[0])
-            hero.setVx(-speed);
+        //Move hero
+        hero.moveInBounds(in);
 
-        if (!input[0] && !input[1])
-            hero.setVx(0);
-
-
-        //Up
-        if (input[2] && !input[3])
-            hero.setVy(-speed);
-
-        //Down
-        if (input[3] && !input[2])
-            hero.setVy(speed);
-
-        if (!input[2] && !input[3])
-            hero.setVy(0);
-
-
-        //Update hero location
-        hero.move();
 
 
         //Initialize new map
         if (hero.isCollision(stairs)) {
-            map.init();
-
-            randomLoc(stairs);
-            do {
-                randomLoc(hero);
-            } while (stairs.getX() == hero.getX() && stairs.getY() == hero.getY());
-
-            currentFloor++;
+            newFloor();
         }
 
 
@@ -148,6 +126,89 @@ public class Dungeon {
 
         }*/
 
+
+
+
+
+
+
+        /*
+
+        What can the hero do?
+
+        move to next floor
+
+        access menu
+
+        move
+
+
+        if(stairs.active()){
+
+            //Decide if you should move to the next floor
+
+            stairs.run(input) //Either updates nextFloor, or set active to false
+
+            if(stairs.nextFloor){
+                map.init()
+                randomLoc(hero, stairs)
+            }
+
+        }else if(menu.active()){
+
+
+            //Attack or check inventory
+            menu.run(collisionMap, inventory_stats)
+
+
+            //Update collision map
+            if(!menu.active()){
+                collisionMap = menu.getCollisionMap()
+                hero.attack = true;
+            }
+
+        }else{
+
+
+            //Toggle between enemy and hero
+            if(switch){
+
+
+                if(in[5]){
+
+                    menu.init()
+
+                }else{
+
+                    hero.move();
+
+                    if(hero.done){
+                        switch = false
+                        hero.done = false
+                    }
+
+                    //Show stairs if necessary
+                    if(hero.loc == collisionMap.stairs)
+                        stairs.init()
+                }
+
+            }else{
+
+                enemy.move();
+
+                if(enemy.done){
+                    switch = true;
+                    enemy.done = false
+                }
+
+            }
+        }
+
+
+        */
+
+
+
     }
 
 
@@ -182,6 +243,7 @@ public class Dungeon {
     }
 
 
+    //Randomize sprite location
     private void randomLoc(SpriteImage h) {
 
         int[] temp = map.getRandomRoom();
@@ -190,6 +252,7 @@ public class Dungeon {
         h.setY(temp[1]);
     }
 
+    //Check for finished dungeon
     public void checkDungeon() {
         if (currentFloor > maxFloors) {
             dungeonFinished = true;

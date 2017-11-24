@@ -20,10 +20,14 @@ public class Town {
     public boolean townRun;
     public boolean canMove;
 
+
     //TODO: remove this test code
     Dialogue talk;
 
 
+    /*
+    * Default contsructor
+    * */
     public Town() {
 
         heroImg = new ImageIcon(getClass().getResource("Assets/hero.png"));
@@ -60,34 +64,34 @@ public class Town {
 
 
     //Game loops calls this function
-    public void run(boolean input[]) {
+    public void run(boolean in[]) {
 
         checkMove();
 
 
         //Right
-        if (input[0] && !input[1])
+        if (in[0] && !in[1])
             hero.setVx(speed);
 
         //Left
-        if (input[1] && !input[0])
+        if (in[1] && !in[0])
             hero.setVx(-speed);
 
         //Stop moving
-        if (!input[0] && !input[1])
+        if (!in[0] && !in[1])
             hero.setVx(0);
 
 
         //Up
-        if (input[2] && !input[3])
+        if (in[2] && !in[3])
             hero.setVy(-speed);
 
         //Down
-        if (input[3] && !input[2])
+        if (in[3] && !in[2])
             hero.setVy(speed);
 
         //Stop moving
-        if (!input[2] && !input[3])
+        if (!in[2] && !in[3])
             hero.setVy(0);
 
 
@@ -99,16 +103,109 @@ public class Town {
 
 
         //Load dungeon if space is pressed
-        if (input[4] && !canMove) {
+        if (in[4] && !canMove) {
             talk.show = false;
             canMove = true;
             townRun = false;
         }
 
-        if (input[5]) {
+        if (in[5]) {
             talk.show = false;
             canMove = true;
         }
+
+
+
+        /*
+
+        What can user do?
+
+        move
+
+        access menu
+
+        activate actions
+
+        go through dialogue box
+
+        go through store
+
+        select dungeon
+
+
+        if(dialogue.active()){
+
+            //If dialogue is active and action is pressed
+            //Show next part of dialogue
+            if(in[4]){
+
+                dialogue.next()
+
+            }
+
+        }else if(menu.active()){
+
+
+            //If menu is active
+            menu.run(input, inventory_stats)
+
+
+        }else if(store.active()){
+
+            //If stare is active
+            store.run(input, inventory_stats)
+
+
+        }else if(dungeonSelect.active()){
+
+            //Load selected dungeon
+            boolean loadDungeon = dungeonSelect.run(input)
+
+            if(loadDungeon){
+                selected = dungeonSelect.get();
+                townRun = false;
+            }
+
+        }else{
+
+            //Check for action or movement
+            if(in[4]){
+
+                //Check if event is possible
+                for(action : actionSpots){
+
+                    //See if valid
+                    if(action.bounds(hero.loc)){
+
+                        switch(action.type){
+
+                            case "dialogue":
+                                dialogue = init_dialogue(action.script)
+                            break;
+
+                            case "store":
+                                store.init()
+                            break;
+
+                            case "dungeon":
+                                dungeonSelect.init();
+                            break;
+                        }
+                    }
+                }
+
+            }else if(in[5]){ //Check for menu access
+
+                menu.init()
+
+            }else{
+
+                hero.move(input, mapBounds)
+            }
+
+        }
+
+        */
 
 
         //Update hero location

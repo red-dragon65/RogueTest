@@ -47,6 +47,24 @@ public class Enemy extends SpriteImage {
     }
 
 
+    /*
+    protected void act(collisionMap){
+
+        //Check for damage
+
+
+        //Decide to attack or move
+
+
+        //Stop focus
+        done = true
+
+    }
+
+
+    */
+
+
     public int attack(int option) {
 
         //Auto attack
