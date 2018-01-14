@@ -72,7 +72,7 @@ public class Display extends JPanel implements ActionListener {
 
         map = new Map();
 
-        hero = new Hero(10);
+        hero = new Hero();
 
         heroImg = new ImageIcon(getClass().getResource("Assets/hero.png"));
 
@@ -95,7 +95,7 @@ public class Display extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         //Makes the hero move.
-        hero.moveInBounds();
+        //hero.moveInBounds();
 
 
         //TODO: Make this dynamic like drawing code

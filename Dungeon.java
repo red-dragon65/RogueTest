@@ -11,7 +11,7 @@ public class Dungeon {
     private Map map;
 
     //Sprites.
-    private Hero hero;
+    private DungeonHero hero;
     private SpriteImage stairs;
 
     //Sprite images.
@@ -22,6 +22,7 @@ public class Dungeon {
     private int maxFloors;
     private int currentFloor;
 
+    CollisionMask mask;
 
 
 
@@ -32,8 +33,9 @@ public class Dungeon {
     public Dungeon() {
 
         map = new Map();
+        mask = new CollisionMask(map.collisionMask, map.getSizeX(), map.getSizeY());
 
-        hero = new Hero(10);
+        hero = new DungeonHero();
         stairs = new SpriteImage();
 
         heroImg = new ImageIcon(getClass().getResource("Assets/hero.png"));
@@ -47,32 +49,45 @@ public class Dungeon {
 
     }
 
+
     //Re-initializer
     public void init() {
 
+        mask = new CollisionMask(map.collisionMask, map.getSizeX(), map.getSizeY());
 
-        randomLoc(stairs);
+
+        mask.setStairs(randomLoc(stairs));
         do {
-            randomLoc(hero);
+            hero.matLoc = randomLoc(hero);
+            //mask.setHero(randomLoc(hero));
         } while (stairs.getX() == hero.getX() && stairs.getY() == hero.getY());
+
+        mask.setHero(hero.matLoc);
 
         maxFloors = 2;
         currentFloor = 1;
 
         dungeonFinished = false;
+
     }
+
 
     //Generate next floor
     private void newFloor() {
 
         map.init();
+        mask.updateMask(map.collisionMask);
 
-        randomLoc(stairs);
+        mask.setStairs(randomLoc(stairs));
         do {
-            randomLoc(hero);
+            hero.matLoc = randomLoc(hero);
+            //mask.setHero(randomLoc(hero));
         } while (stairs.getX() == hero.getX() && stairs.getY() == hero.getY());
 
+        mask.setHero(hero.matLoc);
+
         currentFloor++;
+
     }
 
 
@@ -80,67 +95,16 @@ public class Dungeon {
     public void run(boolean in[]) {
 
 
-        //Move hero
-        hero.moveInBounds(in);
-
-
-
-        //Initialize new map
-        if (hero.isCollision(stairs)) {
-            newFloor();
-        }
-
-
-        //TODO: Make this dynamic like drawing code
-        /*
-        //Move all tiles
-        for(int i = 0; i < 64; i++){
-            for(int z = 0; z < 64; z++){
-                map.matrix[i][z].move();
-            }
-        }*/
-
-
-        //TODO: call load to re-initialize variables
-
-/*
-        //Check for collisions.
-        for(Enemy s : enemies) {
-
-            if(hero.isCollision(s)){
-
-                /**If they instersect, do something.*/
-
-        //* if(other.right > thisSprite.left)
-        /*
-                if((s.getX() + (s.getWidth()) > hero.getX())){
-                    //Reverse direction.
-                    s.setVx(-(s.getVx()));
-                }
-                //* if(other.left < thisSprite.right)
-                if(s.getX() < (hero.getX() + hero.getWidth())){
-                    //Reverse direction.
-                    s.setVx(-s.getVx());
-                }
-            }
-
-        }*/
-
-
-
-
-
 
 
         /*
+
+        Decide what can run with input
 
         What can the hero do?
-
-        move to next floor
-
-        access menu
-
-        move
+        -move to next floor
+        -access menu
+        -move
 
 
         if(stairs.active()){
@@ -205,11 +169,109 @@ public class Dungeon {
         }
 
 
+
+
+
+
+
         */
 
 
+        //Activate hero
+        hero.act(in, mask);
+
+
+
+
+        /*
+
+        //Adjust collision map for move or attack
+        //Animate hero
+        hero.act(in, collisionMap)
+
+
+        //If collision map has changed, then act
+        enemy.act()
+
+
+        //Check for stairs interaction
+        if(collisionMap.stairs == collisionMap.hero)
+            stairs.init();
+
+
+         */
+
+
+        /*
+
+        What is a collisionMap?
+
+        Matrix of map floor locations
+
+        Holds sprite location
+
+        How many matrixes does the collision mask need?
+         - One for floor layout
+         - One for item layout
+         - One for attack layout
+         - One for enemy layout
+
+
+
+        TODO
+        Hero act method
+        CollisionMap class
+
+
+        *Map returns matrix
+
+        *Matrix initializes collisionMap.layout
+
+
+        Hero location goes into collisionMap.characters
+
+        Stairs location goes into collisionMap.characters
+
+
+        Hero moves:
+            - Check collision map if you can move
+            - If yes, update hero loc in collision map
+            - If no, don't do anything
+
+        Check if hero and stairs have same location.
+        If yes, show dialogue
+
+
+
+        */
+
+
+        //Initialize new map
+        /*if (hero.isCollision(stairs)) {
+            newFloor();
+        }*/
+
+        if (mask.onStairs()) {
+            newFloor();
+        }
+
+
+        //TODO: Make this dynamic like drawing code
+        /*
+        //Move all tiles
+        //Move tiles instead of character
+        for(int i = 0; i < 64; i++){
+            for(int z = 0; z < 64; z++){
+                map.matrix[i][z].move();
+            }
+        }*/
 
     }
+
+
+
+
+
 
 
     /*
@@ -244,12 +306,23 @@ public class Dungeon {
 
 
     //Randomize sprite location
-    private void randomLoc(SpriteImage h) {
+    private int[] randomLoc(SpriteImage h) {
 
-        int[] temp = map.getRandomRoom();
+        int[] cM = new int[2];
+        int[] temp = new int[2];
+
+        int[] result = map.getRandomRoom();
+        cM[0] = result[0];
+        cM[1] = result[1];
+        temp[0] = result[2];
+        temp[1] = result[3];
+
         //Set hero starting location.
         h.setX(temp[0]);
         h.setY(temp[1]);
+
+
+        return cM;
     }
 
     //Check for finished dungeon

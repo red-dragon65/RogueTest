@@ -8,7 +8,7 @@ public class Map {
 
     private final int sizex = 70, sizey = 53;
 
-    private int[][] collisionMask;
+    public int[][] collisionMask;
     public Tile[][] matrix;
     private int[][] grid;
 
@@ -49,6 +49,7 @@ public class Map {
     //Initialize
     public void init() {
 
+        //Initialize map
         for (int i = 0; i < sizey; i++) {
             for (int z = 0; z < sizex; z++) {
                 matrix[i][z] = new Tile();
@@ -71,6 +72,20 @@ public class Map {
         halls();
 
         advanceEdges();
+
+
+        //Initialize collisionMap
+        for (int i = 0; i < sizey; i++) {
+            for (int z = 0; z < sizex; z++) {
+
+
+                if (matrix[i][z].getName().equals("dirt")) {
+                    collisionMask[i][z] = 1;
+                } else {
+                    collisionMask[i][z] = 0;
+                }
+            }
+        }
 
     }
 
@@ -490,8 +505,10 @@ public class Map {
 
     public int[] getRandomRoom() {
 
+        int[] result = new int[4];
         int[] loc = new int[2];
         int[] temp = new int[2];
+        int[] tileMatri = new int[2];
 
         //Get random room
         do {
@@ -505,13 +522,18 @@ public class Map {
             matrix[loc[0] * 16 + 8][loc[1] * 16 + 8];
         }while();*/
 
+        tileMatri[0] = loc[0] * 16 + 8;
+        tileMatri[1] = loc[1] * 16 + 8;
 
-        temp[0] = matrix[loc[0] * 16 + 8][loc[1] * 16 + 8].getX();
-        temp[1] = matrix[loc[0] * 16 + 8][loc[1] * 16 + 8].getY();
+        temp[0] = matrix[tileMatri[0]][tileMatri[1]].getX();
+        temp[1] = matrix[tileMatri[0]][tileMatri[1]].getY();
 
+        result[0] = tileMatri[0];
+        result[1] = tileMatri[1];
+        result[2] = temp[0];
+        result[3] = temp[1];
 
-        return temp;
+        return result;
     }
-
 
 }

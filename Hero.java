@@ -6,23 +6,22 @@ import java.awt.*;
 /**
  * Class that holds hero specific data.
  */
-public class Hero extends Enemy {
-
-    private int exp = 0;
+public class Hero extends SpriteImage {
 
     private int speed = 5;
 
     /*
      * Default constructor.
      */
-    public Hero(int lvl) {
-        super(lvl);
+    public Hero() {
+        super();
     }
 
 
 
     //Move with bounds.
     protected void moveInBounds(boolean in[]) {
+
 
         //Right
         if (in[0] && !in[1])
@@ -95,30 +94,6 @@ public class Hero extends Enemy {
     }
 
      */
-
-
-    public int getHealth() {
-        return health;
-    }
-
-    public int getMana() {
-        return mana;
-    }
-
-    public int getLvl() {
-        return lvl;
-    }
-
-
-    public void addExp(int expval) {
-
-        exp += expval;
-
-        if (exp > (int) (lvl * mult)) {
-            exp = 0;
-            lvl += 1;
-        }
-    }
 
 
     /*

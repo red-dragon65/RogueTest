@@ -33,7 +33,7 @@ public class Town {
         heroImg = new ImageIcon(getClass().getResource("Assets/hero.png"));
         townImg = new ImageIcon(getClass().getResource("test/town.bin"));
 
-        hero = new Hero(10);
+        hero = new Hero();
         townMap = new SpriteImage();
 
         hero.setIMAGE(heroImg);
