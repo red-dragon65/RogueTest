@@ -15,7 +15,6 @@ public class Window extends JFrame {
      */
     public Window() {
         Loop p = new Loop();
-        //Display p = new Display();
 
         //Add the display panel to this window.
         add(p);

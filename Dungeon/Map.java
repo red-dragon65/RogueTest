@@ -1,4 +1,4 @@
-package RogueGame;
+package RogueGame.Dungeon;
 
 
 import java.util.Random;
@@ -508,7 +508,7 @@ public class Map {
         int[] result = new int[4];
         int[] loc = new int[2];
         int[] temp = new int[2];
-        int[] tileMatri = new int[2];
+        int[] tileMatrix = new int[2];
 
         //Get random room
         do {
@@ -522,14 +522,14 @@ public class Map {
             matrix[loc[0] * 16 + 8][loc[1] * 16 + 8];
         }while();*/
 
-        tileMatri[0] = loc[0] * 16 + 8;
-        tileMatri[1] = loc[1] * 16 + 8;
+        tileMatrix[0] = loc[0] * 16 + 8;
+        tileMatrix[1] = loc[1] * 16 + 8;
 
-        temp[0] = matrix[tileMatri[0]][tileMatri[1]].getX();
-        temp[1] = matrix[tileMatri[0]][tileMatri[1]].getY();
+        temp[0] = matrix[tileMatrix[0]][tileMatrix[1]].getX();
+        temp[1] = matrix[tileMatrix[0]][tileMatrix[1]].getY();
 
-        result[0] = tileMatri[0];
-        result[1] = tileMatri[1];
+        result[0] = tileMatrix[0];
+        result[1] = tileMatrix[1];
         result[2] = temp[0];
         result[3] = temp[1];
 

@@ -1,4 +1,4 @@
-package RogueGame;
+package RogueGame.Dungeon;
 
 public class CollisionMask {
 
@@ -59,9 +59,7 @@ public class CollisionMask {
     }
 
     public boolean onStairs() {
-
-        return heroLoc[0] == stairs[0] && heroLoc[1] == stairs[1];
-
+        return (heroLoc[0] == stairs[0] && heroLoc[1] == stairs[1]);
     }
 
     public void setStairs(int[] loc) {

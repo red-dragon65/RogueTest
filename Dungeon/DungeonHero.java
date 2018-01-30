@@ -1,6 +1,6 @@
-package RogueGame;
+package RogueGame.Dungeon;
 
-import java.awt.*;
+import RogueGame.Sprite.SpriteImage;
 
 public class DungeonHero extends SpriteImage {
 
@@ -25,35 +25,6 @@ public class DungeonHero extends SpriteImage {
 
     //Move with bounds.
     protected void act(boolean in[], CollisionMask mask) {
-
-        //Move
-/*
-        //Right
-        if (in[0] && !in[1])
-            this.setVx(speed);
-
-        //Left
-        if (in[1] && !in[0])
-            this.setVx(-speed);
-
-        //Stop moving
-        if (!in[0] && !in[1])
-            this.setVx(0);
-
-
-        //Up
-        if (in[2] && !in[3])
-            this.setVy(-speed);
-
-        //Down
-        if (in[3] && !in[2])
-            this.setVy(speed);
-
-        //Stop moving
-        if (!in[2] && !in[3])
-            this.setVy(0);
-
-*/
 
 
         //Move character (if input && if collision mask)
@@ -176,8 +147,6 @@ public class DungeonHero extends SpriteImage {
 
 
 
-
-
     /*
 
     protected void move(input, collisionMap){
@@ -221,17 +190,4 @@ public class DungeonHero extends SpriteImage {
 
      */
 
-
-    /*
-     * Methods.TODO: remove this (deprecated)
-     */
-    //Method to check for collisions.
-    public boolean isCollision(SpriteImage other) {
-
-        Rectangle thisSprite = new Rectangle(getX(), getY(), getWidth(), getHeight());
-        Rectangle otherSprite = new Rectangle(other.getX(), other.getY(), other.getWidth(), other.getHeight());
-
-        //See if images intersect.
-        return thisSprite.intersects(otherSprite);
-    }
 }

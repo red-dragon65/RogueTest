@@ -2,6 +2,9 @@ package RogueGame;
 
 //Allow drawing to panel.
 
+import RogueGame.Dungeon.Dungeon;
+import RogueGame.Town.Town;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -26,7 +29,7 @@ public class Loop extends JPanel implements ActionListener {
     private Dungeon dungeon;
     private Town town;
 
-    InputListener input;
+    private InputListener input;
 
 
     public final int width = 1704; // 640

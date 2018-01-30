@@ -1,4 +1,7 @@
-package RogueGame;
+package RogueGame.Dungeon;
+
+import RogueGame.Dialogue.BoolDialogue;
+import RogueGame.Sprite.SpriteImage;
 
 import javax.swing.*;
 import java.awt.*;
@@ -7,10 +10,10 @@ import java.awt.*;
 public class Dungeon {
 
 
-    //Map sprite tile matrix.
+    //Map sprite tile matrix
     private Map map;
 
-    //Sprites.
+    //Character sprites
     private DungeonHero hero;
     private SpriteImage stairs;
 
@@ -18,12 +21,16 @@ public class Dungeon {
     private ImageIcon heroImg;
     private ImageIcon stairsImg;
 
+    //Dungeon data
     public boolean dungeonFinished;
     private int maxFloors;
     private int currentFloor;
 
-    CollisionMask mask;
+    private CollisionMask mask;
 
+    //Dialogue box
+    private BoolDialogue stairsDialogue;
+    private boolean loadStairsDialogue = true;
 
 
 
@@ -38,15 +45,15 @@ public class Dungeon {
         hero = new DungeonHero();
         stairs = new SpriteImage();
 
-        heroImg = new ImageIcon(getClass().getResource("Assets/hero.png"));
-        stairsImg = new ImageIcon(getClass().getResource("test/point.png"));
+        heroImg = new ImageIcon(getClass().getResource("../Assets/hero.png"));
+        stairsImg = new ImageIcon(getClass().getResource("../test/point.png"));
 
-        //Set hero image.
         hero.setIMAGE(heroImg);
         stairs.setIMAGE(stairsImg);
 
-        init();
+        stairsDialogue = new BoolDialogue();
 
+        init();
     }
 
 
@@ -55,11 +62,10 @@ public class Dungeon {
 
         mask = new CollisionMask(map.collisionMask, map.getSizeX(), map.getSizeY());
 
-
+        //Initialize location
         mask.setStairs(randomLoc(stairs));
         do {
             hero.matLoc = randomLoc(hero);
-            //mask.setHero(randomLoc(hero));
         } while (stairs.getX() == hero.getX() && stairs.getY() == hero.getY());
 
         mask.setHero(hero.matLoc);
@@ -69,6 +75,7 @@ public class Dungeon {
 
         dungeonFinished = false;
 
+        stairsDialogue.setMessage("Do you want to continue?");
     }
 
 
@@ -87,7 +94,6 @@ public class Dungeon {
         mask.setHero(hero.matLoc);
 
         currentFloor++;
-
     }
 
 
@@ -177,8 +183,38 @@ public class Dungeon {
         */
 
 
-        //Activate hero
-        hero.act(in, mask);
+
+
+        /*
+            Run stairs dialogue, or character.
+        */
+        if (stairsDialogue.isActive()) {
+
+            //Show stairs dialogue
+            stairsDialogue.run(in);
+
+            if (stairsDialogue.yes) {
+                newFloor();
+                loadStairsDialogue = true;
+            }
+
+        } else if (loadStairsDialogue && mask.onStairs() && !stairsDialogue.isActive()) {
+
+            //Activate stairs dialogue
+            stairsDialogue.activate();
+
+            loadStairsDialogue = false;
+
+        } else {
+
+            //Run hero
+            hero.act(in, mask);
+
+        }
+
+        //Check if dialogue can be shown
+        if (!mask.onStairs())
+            loadStairsDialogue = true;
 
 
 
@@ -210,7 +246,7 @@ public class Dungeon {
 
         Holds sprite location
 
-        How many matrixes does the collision mask need?
+        How many matrices does the collision mask need?
          - One for floor layout
          - One for item layout
          - One for attack layout
@@ -244,16 +280,6 @@ public class Dungeon {
 
 
         */
-
-
-        //Initialize new map
-        /*if (hero.isCollision(stairs)) {
-            newFloor();
-        }*/
-
-        if (mask.onStairs()) {
-            newFloor();
-        }
 
 
         //TODO: Make this dynamic like drawing code
@@ -297,20 +323,27 @@ public class Dungeon {
             }
         }
 
+        //Draw stairs
         stairs.paint(g, p);
 
         //Draw hero
         hero.paint(g, p);
 
+        //Draw dialogue
+        stairsDialogue.draw(g, p);
     }
 
 
     //Randomize sprite location
     private int[] randomLoc(SpriteImage h) {
 
+        //Collision map info
         int[] cM = new int[2];
+
+        //Sprite image location
         int[] temp = new int[2];
 
+        //Get data from map
         int[] result = map.getRandomRoom();
         cM[0] = result[0];
         cM[1] = result[1];
@@ -320,7 +353,6 @@ public class Dungeon {
         //Set hero starting location.
         h.setX(temp[0]);
         h.setY(temp[1]);
-
 
         return cM;
     }

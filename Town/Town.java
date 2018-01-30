@@ -1,37 +1,40 @@
-package RogueGame;
+package RogueGame.Town;
+
+import RogueGame.Dialogue.BoolDialogue;
+import RogueGame.Sprite.SpriteImage;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class Town {
 
-    //Collision mask
+
     //TODO: add collision mask
+    //Collision mask
 
     //Sprites
     private SpriteImage townMap;
     private Hero hero;
-    private int speed;
 
     //Sprite Images
     private ImageIcon townImg;
     private ImageIcon heroImg;
 
+    //Town running info
     public boolean townRun;
-    public boolean canMove;
-
 
     //TODO: remove this test code
-    Dialogue talk;
+    BoolDialogue dialog;
 
 
     /*
-    * Default contsructor
+     * Default constructor
     * */
     public Town() {
 
-        heroImg = new ImageIcon(getClass().getResource("Assets/hero.png"));
-        townImg = new ImageIcon(getClass().getResource("test/town.bin"));
+        heroImg = new ImageIcon(getClass().getResource("../Assets/hero.png"));
+        townImg = new ImageIcon(getClass().getResource("../test/town.bin"));
+
 
         hero = new Hero();
         townMap = new SpriteImage();
@@ -42,16 +45,7 @@ public class Town {
         townMap.setX(0);
         townMap.setY(0);
 
-
         townRun = true;
-        speed = 3;
-
-        talk = new Dialogue();
-        talk.setMessage("", "");
-        talk.show = false;
-
-        canMove = true;
-
 
         init();
     }
@@ -59,40 +53,20 @@ public class Town {
     public void init() {
         hero.setX(650);
         hero.setY(1000);
-        talk.show = false;
+
+        dialog = new BoolDialogue();
     }
 
 
     //Game loops calls this function
     public void run(boolean in[]) {
 
+        /*
+
+        TODO: remove this old code
         checkMove();
 
-
-        //Right
-        if (in[0] && !in[1])
-            hero.setVx(speed);
-
-        //Left
-        if (in[1] && !in[0])
-            hero.setVx(-speed);
-
-        //Stop moving
-        if (!in[0] && !in[1])
-            hero.setVx(0);
-
-
-        //Up
-        if (in[2] && !in[3])
-            hero.setVy(-speed);
-
-        //Down
-        if (in[3] && !in[2])
-            hero.setVy(speed);
-
-        //Stop moving
-        if (!in[2] && !in[3])
-            hero.setVy(0);
+        hero.moveInBounds(in);
 
 
         //Stop moving
@@ -112,6 +86,54 @@ public class Town {
         if (in[5]) {
             talk.show = false;
             canMove = true;
+        }
+
+        */
+
+
+
+
+
+/* Yes no test
+        if(test.isActive()){
+
+            //Run dialog box
+            hero.stop();//Stop hero from moving
+            test.run(in);
+
+            //Load dungeon if necessary
+            townRun = !test.yes;
+
+        }else{
+
+            //Run hero
+            hero.moveInBounds(in);
+
+            //Activate dialogue if necessary
+            loadDungeon();
+
+        }
+*/
+
+
+        if (dialog.isActive()) {
+
+            //Run dialog box
+            hero.stop();//Stop hero from moving
+            dialog.run(in);
+
+            //Load dungeon if necessary
+            townRun = !dialog.yes;
+
+        } else {
+
+            //Run hero
+            hero.moveInBounds(in);
+
+            //Activate dialogue if necessary
+            //TODO: restore this
+            loadDungeon();
+
         }
 
 
@@ -169,7 +191,7 @@ public class Town {
         }else{
 
             //Check for action or movement
-            if(in[4]){
+            if(in[7]){
 
                 //Check if event is possible
                 for(action : actionSpots){
@@ -207,14 +229,6 @@ public class Town {
 
         */
 
-
-        //Update hero location
-        hero.move();
-
-        //TODO: restore this
-        loadDungeon();
-
-
     }
 
 
@@ -224,9 +238,9 @@ public class Town {
         hero.paint(g, p);
 
 
-        if (talk.show) {
-            talk.draw(g, p);
-        }
+        //Draw dialog
+        dialog.draw(g, p);
+
     }
 
 
@@ -237,49 +251,11 @@ public class Town {
 
             hero.setY(1099);
 
-            canMove = false;
-
-            talk.setMessage("Press space to load...", "Press escape to quit...");
-            talk.show = true;
-            //townRun = false;
-
-            //talk.setMessage("Set Message.");
-            //talk.show = true;
+            dialog.setMessage("Teleport to dungeon?");
+            dialog.activate();
         }
     }
 
 
-    private void checkMove() {
-
-        canMove = !talk.show;
-    }
-
 
 }
-
-/*
-*
-* //Prevent movement when necessary.
-* if(dialogue || animation){
-*     buffer = true;
-* }
-*
-* //Other input.
-* if(input && !buffer){
-*   //Process input
-* }
-*
-*
-* //Show object message to screen if necessary.
-* if(user press == A){
-*   if(object exists){
-*       dialogue.setMessage(object.message.pop());
-*       dialogue.show;
-*   }
-* }
-*
-* Create scene generator for town.
-*
-*
-*
-*/

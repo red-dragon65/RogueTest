@@ -1,7 +1,7 @@
-package RogueGame;
+package RogueGame.Town;
 
 
-import java.awt.*;
+import RogueGame.Sprite.SpriteImage;
 
 /**
  * Class that holds hero specific data.
@@ -52,6 +52,14 @@ public class Hero extends SpriteImage {
 
     }
 
+    public void stop() {
+
+        if (this.getVx() != 0 && this.getVy() != 0) {
+            this.setVx(0);
+            this.setVy(0);
+        }
+    }
+
     /*
 
     protected void move(input, collisionMap){
@@ -98,7 +106,7 @@ public class Hero extends SpriteImage {
 
     /*
      * Methods.TODO: remove collision methods?
-     */
+
     //Method to check for collisions.
     public boolean isCollision(SpriteImage other) {
 
@@ -107,7 +115,7 @@ public class Hero extends SpriteImage {
 
         //See if images intersect.
         return thisSprite.intersects(otherSprite);
-    }
+    }*/
 
 /////
 }

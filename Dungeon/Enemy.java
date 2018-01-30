@@ -1,5 +1,7 @@
-package RogueGame;
+package RogueGame.Dungeon;
 
+
+import RogueGame.Sprite.SpriteImage;
 
 /**
  * Class that holds enemy specific data.

@@ -1,4 +1,4 @@
-package RogueGame;
+package RogueGame.Sprite;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +12,7 @@ public class SpriteImage extends Sprite {
     /*
      * Setters.
      */
-    protected void setIMAGE(ImageIcon image) {
+    public void setIMAGE(ImageIcon image) {
         IMAGE = image;
     }
 
@@ -39,7 +39,7 @@ public class SpriteImage extends Sprite {
     }
 
     //Method to put graphic onto panel.
-    protected void paint(Graphics g, JPanel panel) {
+    public void paint(Graphics g, JPanel panel) {
         if (show) {
             if (IMAGE == null) {
                 g.drawRect(getX(), getY(), 20, 20);

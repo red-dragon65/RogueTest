@@ -1,5 +1,7 @@
-package RogueGame;
+package RogueGame.Dungeon;
 
+
+import RogueGame.Sprite.SpriteImage;
 
 import javax.swing.*;
 
@@ -34,30 +36,30 @@ public class Tile extends SpriteImage {
 
     public Tile() {
 
-        tile = new ImageIcon(getClass().getResource("Assets2/General/empty.png"));
-        dirt = new ImageIcon(getClass().getResource("Assets2/General/ground.png"));
+        tile = new ImageIcon(getClass().getResource("../Assets2/General/empty.png"));
+        dirt = new ImageIcon(getClass().getResource("../Assets2/General/ground.png"));
 
-        topEdge = new ImageIcon(getClass().getResource("Assets2/Edge/top.png"));
-        bottomEdge = new ImageIcon(getClass().getResource("Assets2/Edge/bottom.png"));
-        leftEdge = new ImageIcon(getClass().getResource("Assets2/Edge/left.png"));
-        rightEdge = new ImageIcon(getClass().getResource("Assets2/Edge/right.png"));
+        topEdge = new ImageIcon(getClass().getResource("../Assets2/Edge/top.png"));
+        bottomEdge = new ImageIcon(getClass().getResource("../Assets2/Edge/bottom.png"));
+        leftEdge = new ImageIcon(getClass().getResource("../Assets2/Edge/left.png"));
+        rightEdge = new ImageIcon(getClass().getResource("../Assets2/Edge/right.png"));
 
 
         //Corner
-        topLeft = new ImageIcon(getClass().getResource("Assets2/Corner/1.png"));
-        topRight = new ImageIcon(getClass().getResource("Assets2/Corner/2.png"));
-        bottomLeft = new ImageIcon(getClass().getResource("Assets2/Corner/3.png"));
-        bottomRight = new ImageIcon(getClass().getResource("Assets2/Corner/4.png"));
+        topLeft = new ImageIcon(getClass().getResource("../Assets2/Corner/1.png"));
+        topRight = new ImageIcon(getClass().getResource("../Assets2/Corner/2.png"));
+        bottomLeft = new ImageIcon(getClass().getResource("../Assets2/Corner/3.png"));
+        bottomRight = new ImageIcon(getClass().getResource("../Assets2/Corner/4.png"));
 
         //Reversed corner
-        topLeftRev = new ImageIcon(getClass().getResource("Assets2/Corner_reversed/1.png"));
-        topRightRev = new ImageIcon(getClass().getResource("Assets2/Corner_reversed/2.png"));
-        bottomLeftRev = new ImageIcon(getClass().getResource("Assets2/Corner_reversed/3.png"));
-        bottomRightRev = new ImageIcon(getClass().getResource("Assets2/Corner_reversed/4.png"));
+        topLeftRev = new ImageIcon(getClass().getResource("../Assets2/Corner_reversed/1.png"));
+        topRightRev = new ImageIcon(getClass().getResource("../Assets2/Corner_reversed/2.png"));
+        bottomLeftRev = new ImageIcon(getClass().getResource("../Assets2/Corner_reversed/3.png"));
+        bottomRightRev = new ImageIcon(getClass().getResource("../Assets2/Corner_reversed/4.png"));
 
         //Alone
-        pen = new ImageIcon(getClass().getResource("Assets2/Alone/pen.png"));
-        single = new ImageIcon(getClass().getResource("Assets2/Alone/single.png"));
+        pen = new ImageIcon(getClass().getResource("../Assets2/Alone/pen.png"));
+        single = new ImageIcon(getClass().getResource("../Assets2/Alone/single.png"));
 
     }
 
