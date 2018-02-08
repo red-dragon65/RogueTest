@@ -6,9 +6,13 @@ public class DungeonHero extends SpriteImage {
 
     private int speed = 8;
 
-    int step = 0;
-    boolean right, left, up, down;
+    //How many steps the character should take from one tile to the next.
+    private int step = 0;
 
+    //Direction movable allowed
+    private boolean right, left, up, down;
+
+    //Matrix location
     int[] matLoc;
 
 
@@ -28,29 +32,17 @@ public class DungeonHero extends SpriteImage {
 
 
         //Move character (if input && if collision mask)
-        if (in[0] && !left && !up && !down) {
+        if (in[0] && !left && !up && !down)
+            right = mask.checkHero("right");
 
-            if (mask.mask[mask.heroLoc[0]][mask.heroLoc[1] + 1] != 0)
-                right = true;
-        }
+        if (in[1] && !right && !up && !down)
+            left = mask.checkHero("left");
 
-        if (in[1] && !right && !up && !down) {
+        if (in[2] && !right && !left && !down)
+            up = mask.checkHero("up");
 
-            if (mask.mask[mask.heroLoc[0]][mask.heroLoc[1] - 1] != 0)
-                left = true;
-        }
-
-        if (in[2] && !right && !left && !down) {
-
-            if (mask.mask[mask.heroLoc[0] - 1][mask.heroLoc[1]] != 0)
-                up = true;
-        }
-
-        if (in[3] && !right && !left && !up) {
-
-            if (mask.mask[mask.heroLoc[0] + 1][mask.heroLoc[1]] != 0)
-                down = true;
-        }
+        if (in[3] && !right && !left && !up)
+            down = mask.checkHero("down");
 
 
         //Step and update mask
@@ -66,7 +58,7 @@ public class DungeonHero extends SpriteImage {
                 this.setVx(0);
 
                 mask.updateHero("right");
-                mask.draw();
+                mask.showMask();
 
             } else {
 
@@ -88,7 +80,7 @@ public class DungeonHero extends SpriteImage {
                 this.setVx(0);
 
                 mask.updateHero("left");
-                mask.draw();
+                mask.showMask();
 
             } else {
 
@@ -109,7 +101,7 @@ public class DungeonHero extends SpriteImage {
                 this.setVy(0);
 
                 mask.updateHero("up");
-                mask.draw();
+                mask.showMask();
 
             } else {
 
@@ -131,7 +123,7 @@ public class DungeonHero extends SpriteImage {
                 this.setVy(0);
 
                 mask.updateHero("down");
-                mask.draw();
+                mask.showMask();
 
             } else {
 

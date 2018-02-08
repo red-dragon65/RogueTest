@@ -9,20 +9,167 @@ import RogueGame.Sprite.SpriteImage;
 public class Hero extends SpriteImage {
 
     private int speed = 5;
+    private int traverseTileX = 0;
 
-    /*
-     * Default constructor.
-     */
+    //Todo: make this private?
+    int traverseTileY = 0;
+
+
+    //Default constructor
     public Hero() {
         super();
     }
 
 
+    //Buffer movement between different directions.
+    private void bufferMove() {
+        this.setVx(0);
+        this.setVy(0);
+    }
+
 
     //Move with bounds.
-    protected void moveInBounds(boolean in[]) {
+    protected void moveInBounds(boolean in[], CollisionMap mapMask) {
 
 
+        bufferMove();
+
+        //Right
+        if (in[0]) {
+
+            traverseTileX += speed;
+
+            //See if collision check is necessary
+            if (traverseTileX < mapMask.tileSize / 2) {
+
+                this.setVx(speed);
+                move();
+
+            } else {
+
+                //Check for collision
+                if (mapMask.checkHero("right")) {
+
+                    traverseTileX -= mapMask.tileSize;
+                    mapMask.updateHero("right");
+                    this.setVx(speed);
+                    move();
+
+                } else {
+
+                    //Undo theoretical move
+                    traverseTileX -= speed;
+                }
+            }
+            mapMask.showMap();
+        }
+
+
+        bufferMove();
+
+
+        //Left
+        if (in[1]) {
+
+            traverseTileX -= speed;
+
+            //Check if move is valid
+            if (traverseTileX > -mapMask.tileSize / 2) {
+
+                //Move
+                this.setVx(-speed);
+                move();
+
+            } else {
+
+                if (mapMask.checkHero("left")) {
+
+                    traverseTileX += mapMask.tileSize;
+                    mapMask.updateHero("left");
+                    this.setVx(-speed);
+                    move();
+                } else {
+
+                    //Undo theoretical move
+                    traverseTileX += speed;
+                }
+            }
+            mapMask.showMap();
+        }
+
+
+        bufferMove();
+
+
+        //Up
+        if (in[2]) {
+
+            traverseTileY -= speed;
+
+            //Check if move is valid
+            if (traverseTileY > -mapMask.tileSize / 2) {
+
+                this.setVy(-speed);
+                move();
+
+            } else {
+
+                if (mapMask.checkHero("up")) {
+
+                    traverseTileY += mapMask.tileSize;
+                    mapMask.updateHero("up");
+                    this.setVy(-speed);
+                    move();
+
+                } else {
+
+                    //Undo theoretical move
+                    traverseTileY += speed;
+                }
+            }
+            mapMask.showMap();
+        }
+
+
+        bufferMove();
+
+
+        //Down
+        if (in[3]) {
+
+            traverseTileY += speed;
+
+            //Check if move is valid
+            if (traverseTileY < mapMask.tileSize / 2) {
+
+                this.setVy(speed);
+                move();
+
+            } else {
+
+                //Check for collision
+                if (mapMask.checkHero("down")) {
+
+                    //Reset amount
+                    traverseTileY -= mapMask.tileSize;
+                    mapMask.updateHero("down");
+                    this.setVy(speed);
+                    move();
+
+                } else {
+
+                    //Undo theoretical change
+                    traverseTileY -= speed;
+                }
+
+            }
+            mapMask.showMap();
+        }
+
+
+        bufferMove();
+
+/*
         //Right
         if (in[0] && !in[1])
             this.setVx(speed);
@@ -48,16 +195,38 @@ public class Hero extends SpriteImage {
             this.setVy(0);
 
         move();
+*/
 
 
     }
 
+
+    //Stop character movement
     public void stop() {
 
         if (this.getVx() != 0 && this.getVy() != 0) {
             this.setVx(0);
             this.setVy(0);
         }
+    }
+
+    public void resetLocation(CollisionMap mapMask) {
+
+        //Set image location
+        /*
+        These numbers are offset by 6.
+        This allows collision to seem to occur at the
+        center of the character sprite.
+        */
+        setX(654);
+        setY(990);
+
+        //Reset tile offset
+        traverseTileX = 0;
+        traverseTileY = 0;
+
+        //Set collision mask location
+        mapMask.setHero(660, 996);
     }
 
     /*

@@ -8,23 +8,24 @@ import java.awt.*;
 
 public class Town {
 
-
-    //TODO: add collision mask
     //Collision mask
+    private CollisionMap mapMask;
 
     //Sprites
     private SpriteImage townMap;
+    private SpriteImage townOverlay;
     private Hero hero;
 
     //Sprite Images
     private ImageIcon townImg;
     private ImageIcon heroImg;
+    private ImageIcon townOvImg;
 
     //Town running info
     public boolean townRun;
 
     //TODO: remove this test code
-    BoolDialogue dialog;
+    private BoolDialogue dialog;
 
 
     /*
@@ -34,16 +35,22 @@ public class Town {
 
         heroImg = new ImageIcon(getClass().getResource("../Assets/hero.png"));
         townImg = new ImageIcon(getClass().getResource("../test/town.bin"));
+        townOvImg = new ImageIcon(getClass().getResource("../test/townOverlay.png"));
 
+        mapMask = new CollisionMap();
 
         hero = new Hero();
         townMap = new SpriteImage();
+        townOverlay = new SpriteImage();
 
         hero.setIMAGE(heroImg);
         townMap.setIMAGE(townImg);
+        townOverlay.setIMAGE(townOvImg);
 
         townMap.setX(0);
         townMap.setY(0);
+        townOverlay.setX(0);
+        townOverlay.setY(0);
 
         townRun = true;
 
@@ -51,8 +58,7 @@ public class Town {
     }
 
     public void init() {
-        hero.setX(650);
-        hero.setY(1000);
+        hero.resetLocation(mapMask);
 
         dialog = new BoolDialogue();
     }
@@ -94,7 +100,10 @@ public class Town {
 
 
 
-/* Yes no test
+/*
+        Yes no test
+        -----------
+
         if(test.isActive()){
 
             //Run dialog box
@@ -128,7 +137,7 @@ public class Town {
         } else {
 
             //Run hero
-            hero.moveInBounds(in);
+            hero.moveInBounds(in, mapMask);
 
             //Activate dialogue if necessary
             //TODO: restore this
@@ -139,6 +148,8 @@ public class Town {
 
 
         /*
+        General layout
+        --------------
 
         What can user do?
 
@@ -236,6 +247,7 @@ public class Town {
 
         townMap.paint(g, p);
         hero.paint(g, p);
+        townOverlay.paint(g, p);
 
 
         //Draw dialog
@@ -247,9 +259,14 @@ public class Town {
     //TODO: remove this code?
     private void loadDungeon() {
 
-        if (hero.getY() > 1100) {
+        //Bound to load dungeon
+        int bound = 1085;
 
-            hero.setY(1099);
+        if (hero.getY() > bound) {
+
+            //Push hero back
+            hero.setY(hero.getY() - 5);
+            hero.traverseTileY -= 5;
 
             dialog.setMessage("Teleport to dungeon?");
             dialog.activate();

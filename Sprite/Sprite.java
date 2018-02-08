@@ -21,7 +21,7 @@ abstract class Sprite {
     private int vx, vy;
 
     //Set to display sprite.
-    boolean show = true;
+    protected boolean show = true;
 
 
     /*

@@ -64,6 +64,11 @@ public class Tile extends SpriteImage {
     }
 
 
+    /*
+
+    Methods to set the image of the tile.
+
+    */
     public void tile() {
         IMAGE = tile;
         IMAGE.setDescription("empty");

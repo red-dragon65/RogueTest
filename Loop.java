@@ -84,9 +84,9 @@ public class Loop extends JPanel implements ActionListener {
 
 
         //Decide which game logic to run.
-        if (town.townRun)
+        if (town.townRun) {
             town.run(input.getInput());
-        else {
+        } else {
             if (dungeon.dungeonFinished) {
                 dungeon.init();
             } else {

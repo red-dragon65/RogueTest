@@ -2,12 +2,11 @@ package RogueGame.Dungeon;
 
 public class CollisionMask {
 
+    private int[][] mask;
 
-    int[][] mask;
-
-    int[] heroLoc;
-    int[] stairs;
-    int[] mapDimensions;
+    private int[] heroLoc;
+    private int[] stairs;
+    private int[] mapDimensions;
 
 
     public CollisionMask(int[][] mask, int xWidth, int yWidth) {
@@ -24,10 +23,12 @@ public class CollisionMask {
     }
 
 
+    //Updates mask on new floor call
     public void updateMask(int[][] mask) {
         this.mask = mask;
     }
 
+    //Set stairs location on collision mask
     public void setHero(int[] loc) {
 
         heroLoc[0] = loc[0];
@@ -36,6 +37,8 @@ public class CollisionMask {
         mask[loc[0]][loc[1]] = 5;
     }
 
+
+    //Update hero position on collision mask
     public void updateHero(String walk) {
 
         mask[heroLoc[0]][heroLoc[1]] = 1;
@@ -58,10 +61,28 @@ public class CollisionMask {
         mask[heroLoc[0]][heroLoc[1]] = 5;
     }
 
+    public boolean checkHero(String direction) {
+
+        switch (direction) {
+            case "right":
+                return (mask[heroLoc[0]][heroLoc[1] + 1] != 0);
+            case "left":
+                return (mask[heroLoc[0]][heroLoc[1] - 1] != 0);
+            case "up":
+                return (mask[heroLoc[0] - 1][heroLoc[1]] != 0);
+            case "down":
+                return (mask[heroLoc[0] + 1][heroLoc[1]] != 0);
+        }
+
+        return false;
+    }
+
+    //Check for collision with stairs
     public boolean onStairs() {
         return (heroLoc[0] == stairs[0] && heroLoc[1] == stairs[1]);
     }
 
+    //Set stairs location on collision mask
     public void setStairs(int[] loc) {
 
         stairs[0] = loc[0];
@@ -71,9 +92,9 @@ public class CollisionMask {
     }
 
 
+    //TODO: Disable this test code
     //Draws mask to terminal
-    //TODO: Remove this test code
-    public void draw() {
+    public void showMask() {
 
         //Initialize collisionMap
         for (int i = 0; i < mapDimensions[1]; i++) {

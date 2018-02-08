@@ -10,7 +10,7 @@ abstract public class Dialogue {
 
     private String message;
     private boolean active;
-    public boolean yes;
+    private boolean yes;
 
 
     //TODO make text  scroll

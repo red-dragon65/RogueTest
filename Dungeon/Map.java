@@ -16,8 +16,11 @@ public class Map {
     private int imgsize = 24;
 
 
-    //Number of rooms per map.
-    private int roomx, roomy, rooms;
+    //Number of rooms
+    private int rooms, roomMin = 3, roomMax = 6; //1 is min, 12 is max.
+    //Size of rooms
+    private int roomX, minRoomSizeX = 5, maxRoomSizeX = 10; //5 is min, and 10 is max. Offset for both is 1.
+    private int roomY, minRoomSizeY = 5, maxRoomSizeY = 10;
 
     private Random gen;
 
@@ -104,7 +107,9 @@ public class Map {
 
 
         //Up to 3 to 6 rooms.
-        rooms = gen.nextInt(4) + 3;
+        //rooms = gen.nextInt(4) + 3;
+        //Get number of rooms.
+        rooms = gen.nextInt((roomMax - roomMin + 1)) + roomMin;
 
 
         //Populate grid with rooms.
@@ -122,17 +127,18 @@ public class Map {
 
 
             //Gen room size
-            roomx = gen.nextInt(5) + 5;
-            roomy = gen.nextInt(5) + 5;
-
+            //roomX = gen.nextInt(5) + 5;
+            //roomY = gen.nextInt(5) + 5;
+            roomX = gen.nextInt((maxRoomSizeX - minRoomSizeX)) + minRoomSizeX;
+            roomY = gen.nextInt((maxRoomSizeY - minRoomSizeY)) + minRoomSizeY;
 
             //Populate matrix based on grid
-            int padx = gen.nextInt(max - roomx) + 5;
-            int pady = gen.nextInt(max - roomy) + 4;
+            int padx = gen.nextInt(max - roomX) + 5;
+            int pady = gen.nextInt(max - roomY) + 4;
 
             //Makes room
-            for (int p = pady + y * mult; p <= pady + roomx + y * mult; p++) { // rows
-                for (int c = padx + x * mult; c <= padx + roomy + x * mult; c++) { // columns
+            for (int p = pady + y * mult; p <= pady + roomX + y * mult; p++) { // rows
+                for (int c = padx + x * mult; c <= padx + roomY + x * mult; c++) { // columns
                     matrix[p][c].dirt();
                 }
             }
