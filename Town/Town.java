@@ -1,6 +1,8 @@
 package RogueGame.Town;
 
 import RogueGame.Dialogue.BoolDialogue;
+import RogueGame.Dialogue.Dialogue;
+import RogueGame.InputListener;
 import RogueGame.Sprite.SpriteImage;
 
 import javax.swing.*;
@@ -15,17 +17,15 @@ public class Town {
     private SpriteImage townMap;
     private SpriteImage townOverlay;
     private Hero hero;
-
-    //Sprite Images
-    private ImageIcon townImg;
-    private ImageIcon heroImg;
-    private ImageIcon townOvImg;
+    private NPCmap npcs;
 
     //Town running info
     public boolean townRun;
 
-    //TODO: remove this test code
+    //TODO: replace with dungeon loader
     private BoolDialogue dialog;
+
+    private Dialogue talk;
 
 
     /*
@@ -33,19 +33,16 @@ public class Town {
     * */
     public Town() {
 
-        heroImg = new ImageIcon(getClass().getResource("../Assets/hero.png"));
-        townImg = new ImageIcon(getClass().getResource("../test/town.bin"));
-        townOvImg = new ImageIcon(getClass().getResource("../test/townOverlay.png"));
-
         mapMask = new CollisionMap();
 
         hero = new Hero();
         townMap = new SpriteImage();
         townOverlay = new SpriteImage();
+        npcs = new NPCmap();
 
-        hero.setIMAGE(heroImg);
-        townMap.setIMAGE(townImg);
-        townOverlay.setIMAGE(townOvImg);
+        hero.setIMAGE(new ImageIcon(getClass().getResource("../Assets/hero.png")));
+        townMap.setIMAGE(new ImageIcon(getClass().getResource("../test/town.bin")));
+        townOverlay.setIMAGE(new ImageIcon(getClass().getResource("../test/townOverlay.png")));
 
         townMap.setX(0);
         townMap.setY(0);
@@ -61,71 +58,21 @@ public class Town {
         hero.resetLocation(mapMask);
 
         dialog = new BoolDialogue();
+
+        talk = new Dialogue();
     }
 
 
     //Game loops calls this function
-    public void run(boolean in[]) {
-
-        /*
-
-        TODO: remove this old code
-        checkMove();
-
-        hero.moveInBounds(in);
+    public void run(InputListener in) {
 
 
-        //Stop moving
-        if (!canMove) {
-            hero.setVy(0);
-            hero.setVx(0);
-        }
+        if (talk.isActive()) {
 
+            hero.stop();
+            talk.run(in);
 
-        //Load dungeon if space is pressed
-        if (in[4] && !canMove) {
-            talk.show = false;
-            canMove = true;
-            townRun = false;
-        }
-
-        if (in[5]) {
-            talk.show = false;
-            canMove = true;
-        }
-
-        */
-
-
-
-
-
-/*
-        Yes no test
-        -----------
-
-        if(test.isActive()){
-
-            //Run dialog box
-            hero.stop();//Stop hero from moving
-            test.run(in);
-
-            //Load dungeon if necessary
-            townRun = !test.yes;
-
-        }else{
-
-            //Run hero
-            hero.moveInBounds(in);
-
-            //Activate dialogue if necessary
-            loadDungeon();
-
-        }
-*/
-
-
-        if (dialog.isActive()) {
+        } else if (dialog.isActive()) {
 
             //Run dialog box
             hero.stop();//Stop hero from moving
@@ -136,14 +83,35 @@ public class Town {
 
         } else {
 
-            //Run hero
-            hero.moveInBounds(in, mapMask);
 
-            //Activate dialogue if necessary
-            //TODO: restore this
-            loadDungeon();
+            //Run dialog if space bar is pressed
+            if (in.checkInput("space")) {
+
+                //Check for bounds || get data
+                String data = npcs.bounds(hero);
+
+                //Activate dialogue if necessary
+                if (!data.equals("")) {
+
+                    talk.setMessage(data);
+                    talk.activate();
+                    in.bufferInput();
+                }
+
+            } else {
+
+                //Run hero
+                hero.moveInBounds(in, mapMask, npcs);
+
+                //Activate dialogue if necessary
+                //TODO: restore this
+                loadDungeon();
+            }
 
         }
+
+
+
 
 
 
@@ -248,10 +216,16 @@ public class Town {
         townMap.paint(g, p);
         hero.paint(g, p);
         townOverlay.paint(g, p);
+        npcs.paint(g, p);
 
 
         //Draw dialog
         dialog.draw(g, p);
+
+
+        //Draw dialogue
+        if (talk.isActive())
+            talk.draw(g, p);
 
     }
 
@@ -276,3 +250,30 @@ public class Town {
 
 
 }
+
+
+
+
+
+/*
+class for characters
+
+holds array of town characters
+
+loads character dialogue from file into array
+
+
+
+Town:       User clicks button.
+CharClass:  Check for bounds collisions
+Town:       Load dialogue using CharClass info.
+
+Town: Normal: Check for collisions with characters.
+
+
+
+
+
+
+
+*/

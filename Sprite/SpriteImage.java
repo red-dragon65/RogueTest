@@ -21,7 +21,7 @@ public class SpriteImage extends Sprite {
      * Getters.
      */
     //Returns image width, else 20.
-    protected int getWidth() {
+    public int getWidth() {
 
         if (IMAGE == null)
             return 20;
@@ -30,7 +30,7 @@ public class SpriteImage extends Sprite {
     }
 
     //Returns image height, else 20.
-    protected int getHeight() {
+    public int getHeight() {
 
         if (IMAGE == null)
             return 20;

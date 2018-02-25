@@ -12,6 +12,10 @@ public class InputListener extends KeyAdapter {
     //Hold input values.
     private boolean input[] = new boolean[6];
 
+    //Todo: remove test code
+    private boolean spaceBuffer = true;
+
+
     /*
      * Event that occurs when the user presses a key.
      * Used to move hero.
@@ -31,7 +35,16 @@ public class InputListener extends KeyAdapter {
                 input[3] = true;
                 break;
             case KeyEvent.VK_SPACE:
-                input[4] = true;
+                //input[4] = true;
+
+                //Buffer space bar
+                if (spaceBuffer) {
+                    input[4] = true;
+                    spaceBuffer = false;
+                } else {
+                    input[4] = false;
+                }
+
                 break;
             case KeyEvent.VK_ESCAPE:
                 input[5] = true;
@@ -59,7 +72,9 @@ public class InputListener extends KeyAdapter {
                 input[3] = false;
                 break;
             case KeyEvent.VK_SPACE:
+                //Buffer space bar
                 input[4] = false;
+                spaceBuffer = true;
                 break;
             case KeyEvent.VK_ESCAPE:
                 input[5] = false;
@@ -67,6 +82,34 @@ public class InputListener extends KeyAdapter {
         }
     }
 
+    //Don't allow spamming
+    public void bufferInput() {
+
+        //Currently, only space bar is buffered
+        spaceBuffer = false;
+        input[4] = false;
+
+    }
+
+    public boolean checkInput(String s) {
+
+        switch (s) {
+            case "right":
+                return input[0];
+            case "left":
+                return input[1];
+            case "up":
+                return input[2];
+            case "down":
+                return input[3];
+            case "space":
+                return input[4];
+            case "escape":
+                return input[5];
+        }
+
+        return false;
+    }
 
     //Return input values.
     public boolean[] getInput() {

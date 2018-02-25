@@ -1,6 +1,7 @@
 package RogueGame.Town;
 
 
+import RogueGame.InputListener;
 import RogueGame.Sprite.SpriteImage;
 
 /**
@@ -29,13 +30,13 @@ public class Hero extends SpriteImage {
 
 
     //Move with bounds.
-    protected void moveInBounds(boolean in[], CollisionMap mapMask) {
+    protected void moveInBounds(InputListener in, CollisionMap mapMask, NPCmap n) {
 
 
         bufferMove();
 
         //Right
-        if (in[0]) {
+        if (in.checkInput("right") && !n.isCollision(this).equals("right")) {
 
             traverseTileX += speed;
 
@@ -50,6 +51,7 @@ public class Hero extends SpriteImage {
                 //Check for collision
                 if (mapMask.checkHero("right")) {
 
+                    //Move
                     traverseTileX -= mapMask.tileSize;
                     mapMask.updateHero("right");
                     this.setVx(speed);
@@ -61,7 +63,6 @@ public class Hero extends SpriteImage {
                     traverseTileX -= speed;
                 }
             }
-            mapMask.showMap();
         }
 
 
@@ -69,7 +70,7 @@ public class Hero extends SpriteImage {
 
 
         //Left
-        if (in[1]) {
+        if (in.checkInput("left") && !n.isCollision(this).equals("left")) {
 
             traverseTileX -= speed;
 
@@ -84,6 +85,7 @@ public class Hero extends SpriteImage {
 
                 if (mapMask.checkHero("left")) {
 
+                    //Move
                     traverseTileX += mapMask.tileSize;
                     mapMask.updateHero("left");
                     this.setVx(-speed);
@@ -94,7 +96,6 @@ public class Hero extends SpriteImage {
                     traverseTileX += speed;
                 }
             }
-            mapMask.showMap();
         }
 
 
@@ -102,7 +103,7 @@ public class Hero extends SpriteImage {
 
 
         //Up
-        if (in[2]) {
+        if (in.checkInput("up") && !n.isCollision(this).equals("top")) {
 
             traverseTileY -= speed;
 
@@ -116,6 +117,7 @@ public class Hero extends SpriteImage {
 
                 if (mapMask.checkHero("up")) {
 
+                    //Move
                     traverseTileY += mapMask.tileSize;
                     mapMask.updateHero("up");
                     this.setVy(-speed);
@@ -127,7 +129,6 @@ public class Hero extends SpriteImage {
                     traverseTileY += speed;
                 }
             }
-            mapMask.showMap();
         }
 
 
@@ -135,7 +136,7 @@ public class Hero extends SpriteImage {
 
 
         //Down
-        if (in[3]) {
+        if (in.checkInput("down") && !n.isCollision(this).equals("bottom")) {
 
             traverseTileY += speed;
 
@@ -150,7 +151,7 @@ public class Hero extends SpriteImage {
                 //Check for collision
                 if (mapMask.checkHero("down")) {
 
-                    //Reset amount
+                    //Move
                     traverseTileY -= mapMask.tileSize;
                     mapMask.updateHero("down");
                     this.setVy(speed);
@@ -163,7 +164,6 @@ public class Hero extends SpriteImage {
                 }
 
             }
-            mapMask.showMap();
         }
 
 

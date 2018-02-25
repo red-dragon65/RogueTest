@@ -45,13 +45,6 @@ public class Map {
 
         gen = new Random();
 
-        init();
-    }
-
-
-    //Initialize
-    public void init() {
-
         //Initialize map
         for (int i = 0; i < sizey; i++) {
             for (int z = 0; z < sizex; z++) {
@@ -62,6 +55,20 @@ public class Map {
             }
         }
 
+
+        init();
+    }
+
+
+    //Initialize
+    public void init() {
+
+        //Initialize map
+        for (int i = 0; i < sizey; i++) {
+            for (int z = 0; z < sizex; z++) {
+                matrix[i][z].tile();
+            }
+        }
         //Initialize grid.
         for (int z = 0; z < 4; z++) {
             for (int i = 0; i < 3; i++) {

@@ -1,57 +1,129 @@
 package RogueGame.Dialogue;
 
+import RogueGame.InputListener;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
-abstract public class Dialogue {
+public class Dialogue {
 
     //Variables
     private ImageIcon dialog;
 
-    private String message;
     private boolean active;
     private boolean yes;
 
+    private ArrayList<String> script;
 
     //TODO make text  scroll
-
 
     //Constructor
     public Dialogue() {
         active = false;
         yes = false;
-        message = "null";
 
         dialog = new ImageIcon(getClass().getResource("../test/DialogBox.png"));
     }
 
+
     //Set message
     public void setMessage(String message) {
-        this.message = message;
+
+        //Initialize
+        String m = "";
+        int counter = 0;
+        script = new ArrayList<>();
+
+        //Tokenize message.
+        String[] tokens = message.split(" ");
+
+        //Format message into drawable script.
+        for (int i = 0; i < tokens.length; i++) {
+
+            counter += tokens[i].length();
+
+            if (tokens[i].equals("*")) {
+
+                script.add(m);
+                m = "";
+                counter = 0;
+                script.add(" ");
+
+            } else if (counter < 25) {
+                m += tokens[i];
+                m += " ";
+            } else {
+                script.add(m);
+                m = "";
+                counter = 0;
+                i--;
+            }
+
+        }
+        if (!m.equals("")) {
+            script.add(m);
+        }
+
     }
 
 
-    public void run(boolean in[]) {
+    //Run with input
+    public void run(InputListener in) {
 
-        //Load dungeon
-        if (in[4]) {
-            yes = true;
+        if (!script.isEmpty()) {
+
+            if (in.checkInput("space")) {
+
+                /*
+                Removes message from script
+                Stops if: '*' is found, or until 3 have been deleted
+                 */
+                for (int i = 0; i < 4; i++) {
+
+                    if (i == 3 && script.get(0).equals(" ")) {
+                        script.remove(0);
+                        break;
+                    }
+
+
+                    if (i != 3) {
+                        if (!script.get(0).equals(" ")) {
+                            script.remove(0);
+                        } else {
+                            script.remove(0);
+                            break;
+                        }
+                    }
+                }
+
+                in.bufferInput();
+
+            }
+
+        } else {
             active = false;
+            in.bufferInput();
         }
 
-        //Don't load dungeon
-        if (in[5]) {
-            yes = false;
+
+        /*
+        if(in.checkInput("space")){
             active = false;
-        }
+            in.bufferInput();
+        }*/
+
+
 
     }
 
 
+    //Check if the dialogue is showing
     public boolean isActive() {
         return active;
     }
 
+    //Show the dialogue
     public void activate() {
         active = true;
     }
@@ -60,23 +132,38 @@ abstract public class Dialogue {
     //Paint method
     public void draw(Graphics g, JPanel p) {
 
+        //Max characters wide: 25
 
         int x = 500;
         int y = 500;
-        int size = 25;
+        int size = 18;
         int padding = 10;
-
 
         dialog.paintIcon(p, g, x, y);
 
         g.setColor(Color.white);
         g.setFont(new Font("Aerial", Font.PLAIN, size));
-        g.drawString(message, x + 5 + padding, y + size + padding);
+
+        //Draw text
+        int i = 0;
+        while (i < script.size() && i < 3) {
+
+            g.drawString(script.get(i), x + 5 + padding, y + size + padding);
+
+            if (script.get(i).equals(" ")) {
+                break;
+            }
+
+            y += 25;
+            i++;
+        }
+
 
     }
 
 
 }
+
 
 
 /*

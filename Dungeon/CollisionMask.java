@@ -90,7 +90,7 @@ public class CollisionMask {
 
         mask[loc[0]][loc[1]] = 3;
     }
-
+/*
 
     //TODO: Disable this test code
     //Draws mask to terminal
@@ -111,5 +111,5 @@ public class CollisionMask {
         }
         System.out.flush();
     }
-
+*/
 }

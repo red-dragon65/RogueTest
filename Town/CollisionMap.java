@@ -28,7 +28,6 @@ public class CollisionMap {
             System.out.println("IMAGE BOUNDS CONVERSION FAILED.");
         }
 
-        showMap();
     }
 
 
@@ -101,7 +100,6 @@ public class CollisionMap {
 
         mask[heroLoc[0]][heroLoc[1]] = 5;
 
-        showMap();
     }
 
 
@@ -122,7 +120,7 @@ public class CollisionMap {
         return false;
     }
 
-
+/*
     //Todo: Disable this test code
     //Print collision mask matrix
     public void showMap() {
@@ -139,7 +137,7 @@ public class CollisionMap {
         }
         System.out.flush();
     }
-
+*/
 
 }
 

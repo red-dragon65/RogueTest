@@ -58,7 +58,6 @@ public class DungeonHero extends SpriteImage {
                 this.setVx(0);
 
                 mask.updateHero("right");
-                mask.showMask();
 
             } else {
 
@@ -80,7 +79,6 @@ public class DungeonHero extends SpriteImage {
                 this.setVx(0);
 
                 mask.updateHero("left");
-                mask.showMask();
 
             } else {
 
@@ -101,7 +99,6 @@ public class DungeonHero extends SpriteImage {
                 this.setVy(0);
 
                 mask.updateHero("up");
-                mask.showMask();
 
             } else {
 
@@ -123,7 +120,6 @@ public class DungeonHero extends SpriteImage {
                 this.setVy(0);
 
                 mask.updateHero("down");
-                mask.showMask();
 
             } else {
 

@@ -1,5 +1,7 @@
 package RogueGame.Dialogue;
 
+import RogueGame.InputListener;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -35,6 +37,29 @@ public class BoolDialogue {
     }
 
 
+    public void run(InputListener in) {
+
+        //Load ynMenu
+        select.run(in.getInput());
+
+
+        //Load dungeon
+        if (!select.isActive())
+            if (select.yes) {
+
+                yes = true;
+                active = false;
+
+            } else {
+
+                //Don't load dungeon
+                yes = false;
+                active = false;
+            }
+
+    }
+
+    //Todo: remove this old code
     public void run(boolean in[]) {
 
         //Load ynMenu
