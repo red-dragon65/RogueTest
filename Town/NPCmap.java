@@ -1,5 +1,7 @@
 package RogueGame.Town;
 
+import RogueGame.Sprite.SpriteImage;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -16,7 +18,6 @@ public class NPCmap {
 
         init();
 
-        loadDialogue();
 
     }
 
@@ -31,6 +32,7 @@ public class NPCmap {
         }
 
 
+        //TODO: Load this information from a file
         //Set NPC location
         NPCs[0].setX(292);
         NPCs[0].setY(623);
@@ -52,12 +54,6 @@ public class NPCmap {
         NPCs[4].setY(854);
         NPCs[4].setIMAGE(new ImageIcon(getClass().getResource("../test/blue.png"))); //Blue
 
-    }
-
-
-    //TODO: Convert this to read file
-    private void loadDialogue() {
-
         //Green
         NPCs[0].setDialogue("Why is it that the quick brown fox jumps over the lazy dog? * Sounds stupid if you ask me. *");
 
@@ -65,13 +61,14 @@ public class NPCmap {
         NPCs[1].setDialogue("A one. A two. A three! * OW! * I broke my teeth! But that's okay, cause I'm wearin' me dentures! * HAHAHA! *");
 
         //Red
-        NPCs[2].setDialogue("What do you want! * Can't you see I'm busy! * *mumble mumble* * Sorry. I recently lost a very important item at my shop and I can't open until it is found. *");
+        NPCs[2].setDialogue("What do you want! * Can't you see I'm busy! * (mumble... mumble...) * I recently lost a very important item at my shop and I can't open until it is found! *");
 
         //Yellow
         NPCs[3].setDialogue("Why hello! Are you interested in purchasing an item today? * Wait a minute! * Your broke as a rock! * Get get some real money before you hassle me you fool! *");
 
         //Blue
         NPCs[4].setDialogue("So there was this one time I was on an adventure and I twisted my ankle pretty bad. * I could hardly move, but I knew that if i stayed in the dungeon, it would be the end of me. * So I did what I had to do. * I chewed my leg off and made like a rat out of there! *");
+
 
     }
 
@@ -166,7 +163,7 @@ public class NPCmap {
     public void paint(Graphics g, JPanel p) {
 
         for (int i = 0; i < 5; i++) {
-            NPCs[i].paint(g, p);
+            SpriteImage.paint(g, p, NPCs[i]);
         }
 
     }

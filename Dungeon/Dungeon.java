@@ -319,15 +319,15 @@ public class Dungeon {
         //TODO: remove this test code (draws all tiles)
         for (int i = 0; i < map.getSizeY(); i++) {
             for (int z = 0; z < map.getSizeX(); z++) {
-                map.matrix[i][z].paint(g, p);
+                SpriteImage.paint(g, p, map.matrix[i][z]);
             }
         }
 
         //Draw stairs
-        stairs.paint(g, p);
+        SpriteImage.paint(g, p, stairs);
 
         //Draw hero
-        hero.paint(g, p);
+        SpriteImage.paint(g, p, hero);
 
         //Draw dialogue
         stairsDialogue.draw(g, p);

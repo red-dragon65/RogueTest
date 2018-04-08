@@ -109,11 +109,7 @@ public class Town {
             }
 
         }
-
-
-
-
-
+        
 
         /*
         General layout
@@ -213,9 +209,13 @@ public class Town {
 
     public void draw(Graphics g, JPanel p) {
 
-        townMap.paint(g, p);
-        hero.paint(g, p);
-        townOverlay.paint(g, p);
+        SpriteImage.paint(g, p, townMap);
+        SpriteImage.paint(g, p, hero);
+        SpriteImage.paint(g, p, townOverlay);
+
+        //townMap.paint(g, p);
+        //hero.paint(g, p);
+        //townOverlay.paint(g, p);
         npcs.paint(g, p);
 
 

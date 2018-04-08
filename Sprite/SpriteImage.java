@@ -39,12 +39,12 @@ public class SpriteImage extends Sprite {
     }
 
     //Method to put graphic onto panel.
-    public void paint(Graphics g, JPanel panel) {
-        if (show) {
-            if (IMAGE == null) {
-                g.drawRect(getX(), getY(), 20, 20);
+    public static void paint(Graphics g, JPanel panel, SpriteImage s) {
+        if (s.show) {
+            if (s.IMAGE == null) {
+                g.drawRect(s.getX(), s.getY(), 20, 20);
             } else {
-                IMAGE.paintIcon(panel, g, getX(), getY());
+                s.IMAGE.paintIcon(panel, g, s.getX(), s.getY());
             }
         }
     }

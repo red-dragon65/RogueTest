@@ -9,7 +9,7 @@ public class CollisionMap {
 
 
     //Hold map collision data (bitmap)
-    private int[][] mask;
+    private boolean[][] mask;
     private int[] heroLoc;
     private int[] mapSize;
 
@@ -50,7 +50,7 @@ public class CollisionMap {
         mapSize[0] = maskx;
         mapSize[1] = masky;
 
-        mask = new int[maskx][masky];
+        mask = new boolean[maskx][masky];
 
 
         //Populate matrix (does this by looking at the center of each 'tile' for black)
@@ -58,13 +58,12 @@ public class CollisionMap {
 
             for (int y = offset; y < width - offset; y += tileSize) {
 
-                if (image.getRGB(y, x) == Color.BLACK.getRGB()) {
-                    mask[(x - offset) / tileSize][(y - offset) / tileSize] = 1;
-                } else {
-                    mask[(x - offset) / tileSize][(y - offset) / tileSize] = 0;
-                }
+                mask[(x - offset) / tileSize][(y - offset) / tileSize] = image.getRGB(y, x) == Color.BLACK.getRGB();
             }
         }
+
+        image = null;
+        System.gc();
 
     }
 
@@ -72,7 +71,7 @@ public class CollisionMap {
     //Update hero position on the collision mask matrix
     public void updateHero(String walk) {
 
-        mask[heroLoc[0]][heroLoc[1]] = 0;
+        mask[heroLoc[0]][heroLoc[1]] = false;
 
         switch (walk) {
             case "right":
@@ -89,7 +88,7 @@ public class CollisionMap {
                 break;
         }
 
-        mask[heroLoc[0]][heroLoc[1]] = 5;
+        //mask[heroLoc[0]][heroLoc[1]] = 5;
     }
 
     //Convert hero location to collision mask
@@ -98,7 +97,7 @@ public class CollisionMap {
         heroLoc[0] = (y / tileSize);//83
         heroLoc[1] = (x / tileSize);//55
 
-        mask[heroLoc[0]][heroLoc[1]] = 5;
+        //mask[heroLoc[0]][heroLoc[1]] = 5;
 
     }
 
@@ -108,13 +107,13 @@ public class CollisionMap {
 
         switch (direction) {
             case "right":
-                return (mask[heroLoc[0]][heroLoc[1] + 1] != 1);
+                return (!mask[heroLoc[0]][heroLoc[1] + 1]);
             case "left":
-                return (mask[heroLoc[0]][heroLoc[1] - 1] != 1);
+                return (!mask[heroLoc[0]][heroLoc[1] - 1]);
             case "up":
-                return (mask[heroLoc[0] - 1][heroLoc[1]] != 1);
+                return (!mask[heroLoc[0] - 1][heroLoc[1]]);
             case "down":
-                return (mask[heroLoc[0] + 1][heroLoc[1]] != 1);
+                return (!mask[heroLoc[0] + 1][heroLoc[1]]);
         }
 
         return false;
