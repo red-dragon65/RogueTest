@@ -32,7 +32,6 @@ public class Hero extends SpriteImage {
     //Move with bounds.
     protected void moveInBounds(InputListener in, CollisionMap mapMask, NPCmap n) {
 
-
         bufferMove();
 
         //Right

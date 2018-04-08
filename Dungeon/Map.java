@@ -50,8 +50,6 @@ public class Map {
             for (int z = 0; z < sizex; z++) {
                 matrix[i][z] = new Tile();
                 matrix[i][z].tile();
-                matrix[i][z].setX(z * imgsize);
-                matrix[i][z].setY(i * imgsize);
             }
         }
 
@@ -538,8 +536,8 @@ public class Map {
         tileMatrix[0] = loc[0] * 16 + 8;
         tileMatrix[1] = loc[1] * 16 + 8;
 
-        temp[0] = matrix[tileMatrix[0]][tileMatrix[1]].getX();
-        temp[1] = matrix[tileMatrix[0]][tileMatrix[1]].getY();
+        temp[0] = tileMatrix[1] * Tile.getWidth(matrix[0][0]);
+        temp[1] = tileMatrix[0] * Tile.getHeight(matrix[0][0]);
 
         result[0] = tileMatrix[0];
         result[1] = tileMatrix[1];

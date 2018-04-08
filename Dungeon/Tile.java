@@ -1,11 +1,16 @@
 package RogueGame.Dungeon;
 
 
-import RogueGame.Sprite.SpriteImage;
+
 
 import javax.swing.*;
+import java.awt.*;
 
-public class Tile extends SpriteImage {
+public class Tile {
+
+    private ImageIcon IMAGE;
+
+    private static boolean init = false;
 
     //General
     private static ImageIcon tile;
@@ -36,31 +41,34 @@ public class Tile extends SpriteImage {
 
     public Tile() {
 
-        tile = new ImageIcon(getClass().getResource("../Assets2/General/empty.png"));
-        dirt = new ImageIcon(getClass().getResource("../Assets2/General/ground.png"));
+        if (!init) {
 
-        topEdge = new ImageIcon(getClass().getResource("../Assets2/Edge/top.png"));
-        bottomEdge = new ImageIcon(getClass().getResource("../Assets2/Edge/bottom.png"));
-        leftEdge = new ImageIcon(getClass().getResource("../Assets2/Edge/left.png"));
-        rightEdge = new ImageIcon(getClass().getResource("../Assets2/Edge/right.png"));
+            tile = new ImageIcon(getClass().getResource("../Assets2/General/empty.png"));
+            dirt = new ImageIcon(getClass().getResource("../Assets2/General/ground.png"));
+
+            topEdge = new ImageIcon(getClass().getResource("../Assets2/Edge/top.png"));
+            bottomEdge = new ImageIcon(getClass().getResource("../Assets2/Edge/bottom.png"));
+            leftEdge = new ImageIcon(getClass().getResource("../Assets2/Edge/left.png"));
+            rightEdge = new ImageIcon(getClass().getResource("../Assets2/Edge/right.png"));
 
 
-        //Corner
-        topLeft = new ImageIcon(getClass().getResource("../Assets2/Corner/1.png"));
-        topRight = new ImageIcon(getClass().getResource("../Assets2/Corner/2.png"));
-        bottomLeft = new ImageIcon(getClass().getResource("../Assets2/Corner/3.png"));
-        bottomRight = new ImageIcon(getClass().getResource("../Assets2/Corner/4.png"));
+            //Corner
+            topLeft = new ImageIcon(getClass().getResource("../Assets2/Corner/1.png"));
+            topRight = new ImageIcon(getClass().getResource("../Assets2/Corner/2.png"));
+            bottomLeft = new ImageIcon(getClass().getResource("../Assets2/Corner/3.png"));
+            bottomRight = new ImageIcon(getClass().getResource("../Assets2/Corner/4.png"));
 
-        //Reversed corner
-        topLeftRev = new ImageIcon(getClass().getResource("../Assets2/Corner_reversed/1.png"));
-        topRightRev = new ImageIcon(getClass().getResource("../Assets2/Corner_reversed/2.png"));
-        bottomLeftRev = new ImageIcon(getClass().getResource("../Assets2/Corner_reversed/3.png"));
-        bottomRightRev = new ImageIcon(getClass().getResource("../Assets2/Corner_reversed/4.png"));
+            //Reversed corner
+            topLeftRev = new ImageIcon(getClass().getResource("../Assets2/Corner_reversed/1.png"));
+            topRightRev = new ImageIcon(getClass().getResource("../Assets2/Corner_reversed/2.png"));
+            bottomLeftRev = new ImageIcon(getClass().getResource("../Assets2/Corner_reversed/3.png"));
+            bottomRightRev = new ImageIcon(getClass().getResource("../Assets2/Corner_reversed/4.png"));
 
-        //Alone
-        pen = new ImageIcon(getClass().getResource("../Assets2/Alone/pen.png"));
-        single = new ImageIcon(getClass().getResource("../Assets2/Alone/single.png"));
-
+            //Alone
+            pen = new ImageIcon(getClass().getResource("../Assets2/Alone/pen.png"));
+            single = new ImageIcon(getClass().getResource("../Assets2/Alone/single.png"));
+            init = true;
+        }
     }
 
 
@@ -140,6 +148,23 @@ public class Tile extends SpriteImage {
 
     public String getName() {
         return IMAGE.getDescription();
+    }
+
+    public static int getHeight(Tile s) {
+        return s.IMAGE.getIconHeight();
+    }
+
+    public static int getWidth(Tile s) {
+        return s.IMAGE.getIconWidth();
+    }
+
+    //Method to put graphic onto panel.
+    public static void paint(Graphics g, JPanel panel, Tile s, int x, int y) {
+        if (s.IMAGE == null) {
+            g.drawRect(x, y, 20, 20);
+        } else {
+            s.IMAGE.paintIcon(panel, g, x, y);
+        }
     }
 
 

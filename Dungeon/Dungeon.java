@@ -316,12 +316,24 @@ public class Dungeon {
         }
         */
 
+        /*
         //TODO: remove this test code (draws all tiles)
         for (int i = 0; i < map.getSizeY(); i++) {
             for (int z = 0; z < map.getSizeX(); z++) {
                 SpriteImage.paint(g, p, map.matrix[i][z]);
             }
+        }*/
+
+
+        //Test code: Dynamic tile render
+        for (int i = 0; i < map.getSizeY(); i++) {
+            for (int z = 0; z < map.getSizeX(); z++) {
+                Tile.paint(g, p, map.matrix[i][z], z * Tile.getWidth(map.matrix[0][0]), i * Tile.getHeight(map.matrix[0][0]));
+            }
         }
+
+
+
 
         //Draw stairs
         SpriteImage.paint(g, p, stairs);

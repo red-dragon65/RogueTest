@@ -30,7 +30,6 @@ public class DungeonHero extends SpriteImage {
     //Move with bounds.
     protected void act(boolean in[], CollisionMask mask) {
 
-
         //Move character (if input && if collision mask)
         if (in[0] && !left && !up && !down)
             right = mask.checkHero("right");

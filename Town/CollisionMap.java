@@ -127,7 +127,7 @@ public class CollisionMap {
         for (int x = 0; x < mapSize[0]; x++) {
             for (int y = 0; y < mapSize[1]; y++) {
 
-                if (mask[x][y] != 0)
+                if (!mask[x][y])
                     System.out.print(mask[x][y] + " ");
                 else
                     System.out.print("  ");
