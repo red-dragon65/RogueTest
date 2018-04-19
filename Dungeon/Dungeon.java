@@ -1,6 +1,7 @@
 package RogueGame.Dungeon;
 
 import RogueGame.Dialogue.BoolDialogue;
+import RogueGame.InputListener;
 import RogueGame.Sprite.SpriteImage;
 
 import javax.swing.*;
@@ -45,20 +46,23 @@ public class Dungeon {
         hero = new DungeonHero();
         stairs = new SpriteImage();
 
-        heroImg = new ImageIcon(getClass().getResource("../Assets/hero.png"));
-        stairsImg = new ImageIcon(getClass().getResource("../test/point.png"));
+        heroImg = new ImageIcon(getClass().getResource("../Assets/Other/Characters/hero.png"));
+        stairsImg = new ImageIcon(getClass().getResource("../Assets/Other/Characters/red.png"));
 
         hero.setIMAGE(heroImg);
         stairs.setIMAGE(stairsImg);
 
         stairsDialogue = new BoolDialogue();
 
-        init();
+        dungeonFinished = true;
+
     }
 
 
     //Re-initializer
-    public void init() {
+    public void init(String dungeonType) {
+
+        setDungeon(dungeonType);
 
         mask = new CollisionMask(map.collisionMask, map.getSizeX(), map.getSizeY());
 
@@ -70,7 +74,6 @@ public class Dungeon {
 
         mask.setHero(hero.matLoc);
 
-        maxFloors = 2;
         currentFloor = 1;
 
         dungeonFinished = false;
@@ -78,27 +81,64 @@ public class Dungeon {
         stairsDialogue.setMessage("Do you want to continue?");
     }
 
+    //Set variables for dungeon, tiles, and map according to user selection
+    private void setDungeon(String dungeonType) {
+
+        //Todo: remove this test
+        System.out.println("Selected Dungeon: " + dungeonType);
+
+        switch (dungeonType) {
+            case "Test Area":
+                map.setMap("TestArea", 2, 4, 6, 6);
+                maxFloors = 2;
+                break;
+            case "Forgotten Forest":
+                map.setMap("ForgottenForest", 4, 7, 7, 9);
+                maxFloors = 3;
+                break;
+            case "Old Tower":
+                map.setMap("OldTower", 7, 9, 9, 4);
+                maxFloors = 4;
+                break;
+            case "Lava Delta":
+                map.setMap("LavaDelta", 9, 12, 4, 4);
+                maxFloors = 5;
+                break;
+            default:
+                map.setMap("TestArea", 2, 5, 6, 6);
+                maxFloors = 2;
+
+        }
+
+        map.init();
+    }
+
 
     //Generate next floor
     private void newFloor() {
 
-        map.init();
-        mask.updateMask(map.collisionMask);
-
-        mask.setStairs(randomLoc(stairs));
-        do {
-            hero.matLoc = randomLoc(hero);
-            //mask.setHero(randomLoc(hero));
-        } while (stairs.getX() == hero.getX() && stairs.getY() == hero.getY());
-
-        mask.setHero(hero.matLoc);
-
         currentFloor++;
+
+        if (!checkDungeon()) {
+
+            map.init();
+            mask.updateMask(map.collisionMask);
+
+            mask.setStairs(randomLoc(stairs));
+            do {
+                hero.matLoc = randomLoc(hero);
+            } while (stairs.getX() == hero.getX() && stairs.getY() == hero.getY());
+
+            mask.setHero(hero.matLoc);
+        } else {
+            Tile.init = false;
+        }
+
     }
 
 
     //Game loop calls this function.
-    public void run(boolean in[]) {
+    public void run(InputListener in) {
 
 
 
@@ -181,6 +221,7 @@ public class Dungeon {
 
 
         */
+
 
 
 
@@ -370,10 +411,12 @@ public class Dungeon {
     }
 
     //Check for finished dungeon
-    public void checkDungeon() {
+    public boolean checkDungeon() {
         if (currentFloor > maxFloors) {
             dungeonFinished = true;
+            return true;
         }
+        return false;
     }
 
 }

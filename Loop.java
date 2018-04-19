@@ -78,9 +78,6 @@ public class Loop extends JPanel implements ActionListener {
      */
     public void actionPerformed(ActionEvent e) {
 
-        //TODO: remove old code
-        //dungeon.run(input.getInput());
-        //town.run(input.getInput());
 
         //Decide which game logic to run.
         if (town.townRun) {
@@ -88,10 +85,10 @@ public class Loop extends JPanel implements ActionListener {
         } else {
 
             if (dungeon.dungeonFinished) {
-                dungeon.init();
+                dungeon.init(town.selectedDungeon);
             } else {
 
-                dungeon.run(input.getInput());
+                dungeon.run(input);
                 dungeon.checkDungeon();
                 town.townRun = dungeon.dungeonFinished;
 

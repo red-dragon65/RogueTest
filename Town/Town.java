@@ -1,7 +1,7 @@
 package RogueGame.Town;
 
-import RogueGame.Dialogue.BoolDialogue;
 import RogueGame.Dialogue.Dialogue;
+import RogueGame.Dialogue.DungeonDialogue;
 import RogueGame.InputListener;
 import RogueGame.Sprite.SpriteImage;
 
@@ -22,15 +22,16 @@ public class Town {
     //Town running info
     public boolean townRun;
 
-    //TODO: replace with dungeon loader
-    private BoolDialogue dialog;
-
+    //Dialogues
+    private DungeonDialogue dungeonSelector;
     private Dialogue talk;
+
+    public String selectedDungeon;
 
 
     /*
      * Default constructor
-    * */
+     * */
     public Town() {
 
         mapMask = new CollisionMap();
@@ -40,9 +41,9 @@ public class Town {
         townOverlay = new SpriteImage();
         npcs = new NPCmap();
 
-        hero.setIMAGE(new ImageIcon(getClass().getResource("../Assets/hero.png")));
-        townMap.setIMAGE(new ImageIcon(getClass().getResource("../test/town.bin")));
-        townOverlay.setIMAGE(new ImageIcon(getClass().getResource("../test/townOverlay.png")));
+        hero.setIMAGE(new ImageIcon(getClass().getResource("../Assets/Other/Characters/hero.png")));
+        townMap.setIMAGE(new ImageIcon(getClass().getResource("../Assets/Other/Town/town.bin")));
+        townOverlay.setIMAGE(new ImageIcon(getClass().getResource("../Assets/Other/Town/townOverlay.png")));
 
         townMap.setX(0);
         townMap.setY(0);
@@ -57,7 +58,7 @@ public class Town {
     public void init() {
         hero.resetLocation(mapMask);
 
-        dialog = new BoolDialogue();
+        dungeonSelector = new DungeonDialogue();
 
         talk = new Dialogue();
     }
@@ -72,14 +73,18 @@ public class Town {
             hero.stop();
             talk.run(in);
 
-        } else if (dialog.isActive()) {
+        } else if (dungeonSelector.isActive()) {
 
             //Run dialog box
             hero.stop();//Stop hero from moving
-            dialog.run(in);
+            dungeonSelector.run(in);
 
-            //Load dungeon if necessary
-            townRun = !dialog.yes;
+            townRun = !dungeonSelector.yes;
+
+            if (!townRun) {
+                selectedDungeon = dungeonSelector.finalChoice;
+            }
+
 
         } else {
 
@@ -95,7 +100,7 @@ public class Town {
 
                     talk.setMessage(data);
                     talk.activate();
-                    in.bufferInput();
+                    in.bufferSpace();
                 }
 
             } else {
@@ -104,7 +109,6 @@ public class Town {
                 hero.moveInBounds(in, mapMask, npcs);
 
                 //Activate dialogue if necessary
-                //TODO: restore this
                 loadDungeon();
             }
 
@@ -220,7 +224,7 @@ public class Town {
 
 
         //Draw dialog
-        dialog.draw(g, p);
+        dungeonSelector.draw(g, p);
 
 
         //Draw dialogue
@@ -242,11 +246,9 @@ public class Town {
             hero.setY(hero.getY() - 5);
             hero.traverseTileY -= 5;
 
-            dialog.setMessage("Teleport to dungeon?");
-            dialog.activate();
+            dungeonSelector.activate();
         }
     }
-
 
 
 }

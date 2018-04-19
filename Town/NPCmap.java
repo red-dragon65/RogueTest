@@ -31,28 +31,29 @@ public class NPCmap {
             NPCs[i] = new NPC();
         }
 
+        String fileLocation = "../Assets/Other/Characters/";
 
         //TODO: Load this information from a file
         //Set NPC location
         NPCs[0].setX(292);
         NPCs[0].setY(623);
-        NPCs[0].setIMAGE(new ImageIcon(getClass().getResource("../test/pen.png"))); //Green
+        NPCs[0].setIMAGE(new ImageIcon(getClass().getResource(fileLocation + "green.png"))); //Green
 
         NPCs[1].setX(1149);
         NPCs[1].setY(646);
-        NPCs[1].setIMAGE(new ImageIcon(getClass().getResource("../test/edge.png"))); //Purple
+        NPCs[1].setIMAGE(new ImageIcon(getClass().getResource(fileLocation + "purple.png"))); //Purple
 
         NPCs[2].setX(880);
         NPCs[2].setY(647);
-        NPCs[2].setIMAGE(new ImageIcon(getClass().getResource("../test/point.png"))); //Red
+        NPCs[2].setIMAGE(new ImageIcon(getClass().getResource(fileLocation + "red.png"))); //Red
 
         NPCs[3].setX(463);
         NPCs[3].setY(490);
-        NPCs[3].setIMAGE(new ImageIcon(getClass().getResource("../test/yellow.png"))); //Yellow
+        NPCs[3].setIMAGE(new ImageIcon(getClass().getResource(fileLocation + "yellow.png"))); //Yellow
 
         NPCs[4].setX(726);
         NPCs[4].setY(854);
-        NPCs[4].setIMAGE(new ImageIcon(getClass().getResource("../test/blue.png"))); //Blue
+        NPCs[4].setIMAGE(new ImageIcon(getClass().getResource(fileLocation + "blue.png"))); //Blue
 
         //Green
         NPCs[0].setDialogue("Why is it that the quick brown fox jumps over the lazy dog? * Sounds stupid if you ask me. *");

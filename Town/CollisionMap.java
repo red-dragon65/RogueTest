@@ -35,7 +35,7 @@ public class CollisionMap {
     private void convert() throws IOException {
 
         //Get image
-        BufferedImage image = ImageIO.read(getClass().getResource("../test/townBounds.png"));
+        BufferedImage image = ImageIO.read(getClass().getResource("../Assets/Other/Town/townBounds.png"));
 
         //Initialize variables
         int width = image.getWidth();

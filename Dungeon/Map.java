@@ -13,9 +13,6 @@ public class Map {
     private int[][] grid;
 
 
-    private int imgsize = 24;
-
-
     //Number of rooms
     private int rooms, roomMin = 3, roomMax = 6; //1 is min, 12 is max.
     //Size of rooms
@@ -23,6 +20,7 @@ public class Map {
     private int roomY, minRoomSizeY = 5, maxRoomSizeY = 10;
 
     private Random gen;
+
 
     public int getSizeX() {
         return sizex;
@@ -54,7 +52,6 @@ public class Map {
         }
 
 
-        init();
     }
 
 
@@ -97,12 +94,21 @@ public class Map {
 
     }
 
+    //Update tiles and map variables
+    public void setMap(String type, int roomMin, int roomMax, int minRoomSizeY, int minRoomSizeX) {
+
+        matrix[0][0].setTile(type);
+
+        this.roomMin = roomMin;
+        this.roomMax = roomMax;
+        this.minRoomSizeY = minRoomSizeY;
+        this.minRoomSizeX = minRoomSizeX;
+    }
+
 
     /**
      * Methods
      */
-
-
     private void rooms() {
 
         int x;

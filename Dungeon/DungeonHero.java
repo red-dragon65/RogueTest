@@ -1,5 +1,6 @@
 package RogueGame.Dungeon;
 
+import RogueGame.InputListener;
 import RogueGame.Sprite.SpriteImage;
 
 public class DungeonHero extends SpriteImage {
@@ -28,19 +29,19 @@ public class DungeonHero extends SpriteImage {
 
 
     //Move with bounds.
-    protected void act(boolean in[], CollisionMask mask) {
+    protected void act(InputListener in, CollisionMask mask) {
 
         //Move character (if input && if collision mask)
-        if (in[0] && !left && !up && !down)
+        if (in.getInput()[0] && !left && !up && !down)
             right = mask.checkHero("right");
 
-        if (in[1] && !right && !up && !down)
+        if (in.getInput()[1] && !right && !up && !down)
             left = mask.checkHero("left");
 
-        if (in[2] && !right && !left && !down)
+        if (in.getInput()[2] && !right && !left && !down)
             up = mask.checkHero("up");
 
-        if (in[3] && !right && !left && !up)
+        if (in.getInput()[3] && !right && !left && !up)
             down = mask.checkHero("down");
 
 

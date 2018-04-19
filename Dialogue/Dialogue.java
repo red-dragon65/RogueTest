@@ -23,7 +23,7 @@ public class Dialogue {
         active = false;
         yes = false;
 
-        dialog = new ImageIcon(getClass().getResource("../test/DialogBox.png"));
+        dialog = new ImageIcon(getClass().getResource("../Assets/Other/Dialogue/DialogBox.png"));
     }
 
 
@@ -97,21 +97,14 @@ public class Dialogue {
                     }
                 }
 
-                in.bufferInput();
+                in.bufferSpace();
 
             }
 
         } else {
             active = false;
-            in.bufferInput();
+            in.bufferSpace();
         }
-
-
-        /*
-        if(in.checkInput("space")){
-            active = false;
-            in.bufferInput();
-        }*/
 
 
 
@@ -132,7 +125,7 @@ public class Dialogue {
     //Paint method
     public void draw(Graphics g, JPanel p) {
 
-        //Max characters wide: 25
+        //Max characters width: 25
 
         int x = 500;
         int y = 500;
