@@ -22,180 +22,119 @@ public class Hero extends SpriteImage {
     }
 
 
-    //Buffer movement between different directions.
-    private void bufferMove() {
-        this.setVx(0);
-        this.setVy(0);
-    }
-
 
     //Move with bounds.
     protected void moveInBounds(InputListener in, CollisionMap mapMask, NPCmap n) {
 
-        bufferMove();
 
-        //Right
-        if (in.checkInput("right") && !n.isCollision(this).equals("right")) {
+        walk(in.checkInput("right"), !n.isCollision(this).equals("right"), "right", mapMask);
+        walk(in.checkInput("left"), !n.isCollision(this).equals("left"), "left", mapMask);
+        walk(in.checkInput("up"), !n.isCollision(this).equals("top"), "up", mapMask);
+        walk(in.checkInput("down"), !n.isCollision(this).equals("bottom"), "down", mapMask);
+        stop();
 
-            traverseTileX += speed;
-
-            //See if collision check is necessary
-            if (traverseTileX < mapMask.tileSize / 2) {
-
-                this.setVx(speed);
-                move();
-
-            } else {
-
-                //Check for collision
-                if (mapMask.checkHero("right")) {
-
-                    //Move
-                    traverseTileX -= mapMask.tileSize;
-                    mapMask.updateHero("right");
-                    this.setVx(speed);
-                    move();
-
-                } else {
-
-                    //Undo theoretical move
-                    traverseTileX -= speed;
-                }
-            }
-        }
+    }
 
 
-        bufferMove();
+    private void walk(boolean direction, boolean check, String type, CollisionMap mapMask) {
 
+        boolean flag = true;
 
-        //Left
-        if (in.checkInput("left") && !n.isCollision(this).equals("left")) {
+        stop();
 
-            traverseTileX -= speed;
+        //Move
+        if (direction && check) {
 
             //Check if move is valid
-            if (traverseTileX > -mapMask.tileSize / 2) {
-
-                //Move
-                this.setVx(-speed);
-                move();
-
-            } else {
-
-                if (mapMask.checkHero("left")) {
-
-                    //Move
-                    traverseTileX += mapMask.tileSize;
-                    mapMask.updateHero("left");
-                    this.setVx(-speed);
-                    move();
-                } else {
-
-                    //Undo theoretical move
+            switch (type) {
+                case "right":
                     traverseTileX += speed;
-                }
+                    if (traverseTileX < mapMask.tileSize / 2) {
+
+                        this.setVx(speed);
+                        move();
+                        flag = false;
+                    }
+                    break;
+                case "left":
+                    traverseTileX -= speed;
+                    if (traverseTileX > -mapMask.tileSize / 2) {
+
+                        this.setVx(-speed);
+                        move();
+                        flag = false;
+                    }
+                    break;
+                case "up":
+                    traverseTileY -= speed;
+                    if (traverseTileY > -mapMask.tileSize / 2) {
+
+                        this.setVy(-speed);
+                        move();
+                        flag = false;
+                    }
+                    break;
+                case "down":
+                    traverseTileY += speed;
+                    if (traverseTileY < mapMask.tileSize / 2) {
+
+                        this.setVy(speed);
+                        move();
+                        flag = false;
+                    }
+                    break;
             }
-        }
 
+            if (flag) {
 
-        bufferMove();
+                //Check for collision
+                if (mapMask.checkHero(type)) {
 
+                    switch (type) {
+                        case "right":
+                            traverseTileX -= mapMask.tileSize;
+                            mapMask.updateHero("right");
+                            this.setVx(speed);
+                            break;
+                        case "left":
+                            traverseTileX += mapMask.tileSize;
+                            mapMask.updateHero("left");
+                            this.setVx(-speed);
+                            break;
+                        case "up":
+                            traverseTileY += mapMask.tileSize;
+                            mapMask.updateHero("up");
+                            this.setVy(-speed);
+                            break;
+                        case "down":
+                            traverseTileY -= mapMask.tileSize;
+                            mapMask.updateHero("down");
+                            this.setVy(speed);
+                            break;
+                    }
 
-        //Up
-        if (in.checkInput("up") && !n.isCollision(this).equals("top")) {
-
-            traverseTileY -= speed;
-
-            //Check if move is valid
-            if (traverseTileY > -mapMask.tileSize / 2) {
-
-                this.setVy(-speed);
-                move();
-
-            } else {
-
-                if (mapMask.checkHero("up")) {
-
-                    //Move
-                    traverseTileY += mapMask.tileSize;
-                    mapMask.updateHero("up");
-                    this.setVy(-speed);
                     move();
 
                 } else {
 
                     //Undo theoretical move
-                    traverseTileY += speed;
+                    switch (type) {
+                        case "right":
+                            traverseTileX -= speed;
+                            break;
+                        case "left":
+                            traverseTileX += speed;
+                            break;
+                        case "up":
+                            traverseTileY += speed;
+                            break;
+                        case "down":
+                            traverseTileY -= speed;
+                            break;
+                    }
                 }
             }
         }
-
-
-        bufferMove();
-
-
-        //Down
-        if (in.checkInput("down") && !n.isCollision(this).equals("bottom")) {
-
-            traverseTileY += speed;
-
-            //Check if move is valid
-            if (traverseTileY < mapMask.tileSize / 2) {
-
-                this.setVy(speed);
-                move();
-
-            } else {
-
-                //Check for collision
-                if (mapMask.checkHero("down")) {
-
-                    //Move
-                    traverseTileY -= mapMask.tileSize;
-                    mapMask.updateHero("down");
-                    this.setVy(speed);
-                    move();
-
-                } else {
-
-                    //Undo theoretical change
-                    traverseTileY -= speed;
-                }
-
-            }
-        }
-
-
-        bufferMove();
-
-/*
-        //Right
-        if (in[0] && !in[1])
-            this.setVx(speed);
-        //Left
-        if (in[1] && !in[0])
-            this.setVx(-speed);
-
-        //Stop moving
-        if (!in[0] && !in[1])
-            this.setVx(0);
-
-
-        //Up
-        if (in[2] && !in[3])
-            this.setVy(-speed);
-
-        //Down
-        if (in[3] && !in[2])
-            this.setVy(speed);
-
-        //Stop moving
-        if (!in[2] && !in[3])
-            this.setVy(0);
-
-        move();
-*/
-
 
     }
 
@@ -203,7 +142,7 @@ public class Hero extends SpriteImage {
     //Stop character movement
     public void stop() {
 
-        if (this.getVx() != 0 && this.getVy() != 0) {
+        if (this.getVx() != 0 || this.getVy() != 0) {
             this.setVx(0);
             this.setVy(0);
         }
@@ -225,65 +164,7 @@ public class Hero extends SpriteImage {
         traverseTileY = 0;
 
         //Set collision mask location
-        mapMask.setHero(660, 996);
+        mapMask.setHero(660, 996); //offset from 'setX' and 'setY' by 6
     }
 
-    /*
-
-    protected void move(input, collisionMap){
-
-
-
-
-        //Check for damage
-        if(collisionMap.attack = this.loc){
-            collisionMap.attack = null;
-
-            while(damage not done)
-                damage.animate()
-        }
-
-
-
-
-        //Either attack or move
-        if(this.attack){
-
-            //Set attack
-            collisionMap.[hero + direction] = attack;
-
-            while(attack not done)
-                attack.animate()
-
-        }else{
-
-            //Move a tile
-            while(moving not done)
-                this.move()
-        }
-
-
-        //Stop focus
-        done = true
-
-
-    }
-
-     */
-
-
-    /*
-     * Methods.TODO: remove collision methods?
-
-    //Method to check for collisions.
-    public boolean isCollision(SpriteImage other) {
-
-        Rectangle thisSprite = new Rectangle(getX(), getY(), getWidth(), getHeight());
-        Rectangle otherSprite = new Rectangle(other.getX(), other.getY(), other.getWidth(), other.getHeight());
-
-        //See if images intersect.
-        return thisSprite.intersects(otherSprite);
-    }*/
-
-/////
 }

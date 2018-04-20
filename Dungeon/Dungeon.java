@@ -87,6 +87,11 @@ public class Dungeon {
         //Todo: remove this test
         System.out.println("Selected Dungeon: " + dungeonType);
 
+        //Max room size: 9 NOT 10. Offset is 1.
+        //I DON'T know what the min room size is.
+
+        //What is the random offset for the room size?
+
         switch (dungeonType) {
             case "Test Area":
                 map.setMap("TestArea", 2, 4, 6, 6);
@@ -101,7 +106,8 @@ public class Dungeon {
                 maxFloors = 4;
                 break;
             case "Lava Delta":
-                map.setMap("LavaDelta", 9, 12, 4, 4);
+                //map.setMap("LavaDelta", 9, 12, 4, 4);
+                map.setMap("LavaDelta", 12, 12, 9, 9);
                 maxFloors = 5;
                 break;
             default:
@@ -139,8 +145,6 @@ public class Dungeon {
 
     //Game loop calls this function.
     public void run(InputListener in) {
-
-
 
 
         /*
@@ -213,10 +217,6 @@ public class Dungeon {
 
             }
         }
-
-
-
-
 
 
 

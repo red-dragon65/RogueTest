@@ -44,103 +44,12 @@ public class DungeonHero extends SpriteImage {
         if (in.getInput()[3] && !right && !left && !up)
             down = mask.checkHero("down");
 
+        walk(right, "right", mask);
+        walk(left, "left", mask);
+        walk(up, "up", mask);
+        walk(down, "down", mask);
 
-        //Step and update mask
-        if (right) {
-
-            step++;
-
-            if (step == (24 / speed) + 1) {
-
-                right = false;
-                step = 0;
-
-                this.setVx(0);
-
-                mask.updateHero("right");
-
-            } else {
-
-                this.setVx(speed);
-            }
-
-
-        }
-
-        if (left) {
-
-            step++;
-
-            if (step == (24 / speed) + 1) {
-
-                left = false;
-                step = 0;
-
-                this.setVx(0);
-
-                mask.updateHero("left");
-
-            } else {
-
-                this.setVx(-speed);
-            }
-
-        }
-
-        if (up) {
-
-            step++;
-
-            if (step == (24 / speed) + 1) {
-
-                up = false;
-                step = 0;
-
-                this.setVy(0);
-
-                mask.updateHero("up");
-
-            } else {
-
-                this.setVy(-speed);
-            }
-
-
-        }
-
-        if (down) {
-
-            step++;
-
-            if (step == (24 / speed) + 1) {
-
-                down = false;
-                step = 0;
-
-                this.setVy(0);
-
-                mask.updateHero("down");
-
-            } else {
-
-                this.setVy(speed);
-            }
-
-        }
-
-
-        move();
-    }
-
-
-
-
-    /*
-
-    protected void move(input, collisionMap){
-
-
-
+        /*
 
         //Check for damage
         if(collisionMap.attack = this.loc){
@@ -149,9 +58,6 @@ public class DungeonHero extends SpriteImage {
             while(damage not done)
                 damage.animate()
         }
-
-
-
 
         //Either attack or move
         if(this.attack){
@@ -173,9 +79,67 @@ public class DungeonHero extends SpriteImage {
         //Stop focus
         done = true
 
+     */
+
+        move();
+
 
     }
 
-     */
+
+    private void walk(boolean direction, String type, CollisionMask mask) {
+
+        if (direction) {
+
+            step++;
+
+            if (step == (24 / speed) + 1) {
+
+                switch (type) {
+                    case "right":
+                        right = false;
+                        this.setVx(0);
+                        mask.updateHero("right");
+                        break;
+                    case "left":
+                        left = false;
+                        this.setVx(0);
+                        mask.updateHero("left");
+                        break;
+                    case "up":
+                        up = false;
+                        this.setVy(0);
+                        mask.updateHero("up");
+                        break;
+                    case "down":
+                        down = false;
+                        this.setVy(0);
+                        mask.updateHero("down");
+                        break;
+                }
+
+                step = 0;
+
+            } else {
+
+                switch (type) {
+                    case "right":
+                        this.setVx(speed);
+                        break;
+                    case "left":
+                        this.setVx(-speed);
+                        break;
+                    case "up":
+                        this.setVy(-speed);
+                        break;
+                    case "down":
+                        this.setVy(speed);
+                        break;
+                }
+
+            }
+
+        }
+    }
 
 }
