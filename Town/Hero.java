@@ -1,8 +1,12 @@
 package RogueGame.Town;
 
 
+import RogueGame.Dialogue.ActionMenu;
 import RogueGame.InputListener;
 import RogueGame.Sprite.SpriteImage;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * Class that holds hero specific data.
@@ -12,6 +16,10 @@ public class Hero extends SpriteImage {
     private int speed = 5;
     private int traverseTileX = 0;
 
+    private ActionMenu menu;
+
+    public boolean free;
+
     //Todo: make this private?
     int traverseTileY = 0;
 
@@ -19,6 +27,8 @@ public class Hero extends SpriteImage {
     //Default constructor
     public Hero() {
         super();
+        menu = new ActionMenu("town");
+        free = true;
     }
 
 
@@ -27,11 +37,31 @@ public class Hero extends SpriteImage {
     protected void moveInBounds(InputListener in, CollisionMap mapMask, NPCmap n) {
 
 
-        walk(in.checkInput("right"), !n.isCollision(this).equals("right"), "right", mapMask);
-        walk(in.checkInput("left"), !n.isCollision(this).equals("left"), "left", mapMask);
-        walk(in.checkInput("up"), !n.isCollision(this).equals("top"), "up", mapMask);
-        walk(in.checkInput("down"), !n.isCollision(this).equals("bottom"), "down", mapMask);
-        stop();
+        if (menu.isActive()) {
+            //menu
+            stop();
+            menu.run(in);
+
+            if (!menu.isActive()) {
+                free = true;
+            }
+
+        } else {
+
+            //walk
+            if (in.checkInput("escape")) {
+                in.bufferEsc();
+                menu.activate();
+                free = false;
+
+            } else {
+                walk(in.checkInput("right"), !n.isCollision(this).equals("right"), "right", mapMask);
+                walk(in.checkInput("left"), !n.isCollision(this).equals("left"), "left", mapMask);
+                walk(in.checkInput("up"), !n.isCollision(this).equals("top"), "up", mapMask);
+                walk(in.checkInput("down"), !n.isCollision(this).equals("bottom"), "down", mapMask);
+                stop();
+            }
+        }
 
     }
 
@@ -165,6 +195,14 @@ public class Hero extends SpriteImage {
 
         //Set collision mask location
         mapMask.setHero(660, 996); //offset from 'setX' and 'setY' by 6
+
+    }
+
+    public void draw(Graphics g, JPanel p) {
+
+        if (menu.isActive()) {
+            menu.draw(g, p);
+        }
     }
 
 }

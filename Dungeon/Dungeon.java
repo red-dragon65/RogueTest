@@ -382,6 +382,8 @@ public class Dungeon {
         //Draw hero
         SpriteImage.paint(g, p, hero);
 
+        hero.draw(g, p);
+
         //Draw dialogue
         stairsDialogue.draw(g, p);
     }

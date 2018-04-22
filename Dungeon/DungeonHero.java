@@ -1,7 +1,11 @@
 package RogueGame.Dungeon;
 
+import RogueGame.Dialogue.ActionMenu;
 import RogueGame.InputListener;
 import RogueGame.Sprite.SpriteImage;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class DungeonHero extends SpriteImage {
 
@@ -16,6 +20,9 @@ public class DungeonHero extends SpriteImage {
     //Matrix location
     int[] matLoc;
 
+    private boolean showMenu;
+    private ActionMenu menu;
+
 
     /*
      * Default constructor.
@@ -25,31 +32,57 @@ public class DungeonHero extends SpriteImage {
 
         right = left = up = down = false;
         matLoc = new int[2];
+
+        showMenu = false;
+        menu = new ActionMenu("dungeon");
     }
 
 
     //Move with bounds.
     protected void act(InputListener in, CollisionMask mask) {
 
-        //Move character (if input && if collision mask)
-        if (in.getInput()[0] && !left && !up && !down)
-            right = mask.checkHero("right");
 
-        if (in.getInput()[1] && !right && !up && !down)
-            left = mask.checkHero("left");
+        if (showMenu && menu.isActive()) {
 
-        if (in.getInput()[2] && !right && !left && !down)
-            up = mask.checkHero("up");
+            //Run menu
+            menu.run(in);
 
-        if (in.getInput()[3] && !right && !left && !up)
-            down = mask.checkHero("down");
+        } else {
 
-        walk(right, "right", mask);
-        walk(left, "left", mask);
-        walk(up, "up", mask);
-        walk(down, "down", mask);
+            //Check for inputs
+            if (in.checkInput("escape")) {
+
+                //Activate menu
+                in.bufferEsc();
+                showMenu = true;
+                menu.activate();
+
+            } else {
+
+                //Move character (if input && if collision mask)
+                if (in.getInput()[0] && !left && !up && !down)
+                    right = mask.checkHero("right");
+
+                if (in.getInput()[1] && !right && !up && !down)
+                    left = mask.checkHero("left");
+
+                if (in.getInput()[2] && !right && !left && !down)
+                    up = mask.checkHero("up");
+
+                if (in.getInput()[3] && !right && !left && !up)
+                    down = mask.checkHero("down");
+
+                walk(right, "right", mask);
+                walk(left, "left", mask);
+                walk(up, "up", mask);
+                walk(down, "down", mask);
+            }
+        }
+
 
         /*
+
+        How input is switched
 
         //Check for damage
         if(collisionMap.attack = this.loc){
@@ -95,6 +128,7 @@ public class DungeonHero extends SpriteImage {
 
             if (step == (24 / speed) + 1) {
 
+                //If walk not possible
                 switch (type) {
                     case "right":
                         right = false;
@@ -122,6 +156,7 @@ public class DungeonHero extends SpriteImage {
 
             } else {
 
+                //If walk possible
                 switch (type) {
                     case "right":
                         this.setVx(speed);
@@ -139,6 +174,14 @@ public class DungeonHero extends SpriteImage {
 
             }
 
+        }
+
+    }
+
+    public void draw(Graphics g, JPanel p) {
+
+        if (showMenu) {
+            menu.draw(g, p);
         }
     }
 

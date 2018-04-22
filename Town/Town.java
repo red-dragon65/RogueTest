@@ -90,7 +90,7 @@ public class Town {
 
 
             //Run dialog if space bar is pressed
-            if (in.checkInput("space")) {
+            if (in.checkInput("space") && hero.free) {
 
                 //Check for bounds || get data
                 String data = npcs.bounds(hero);
@@ -216,6 +216,8 @@ public class Town {
         SpriteImage.paint(g, p, townMap);
         SpriteImage.paint(g, p, hero);
         SpriteImage.paint(g, p, townOverlay);
+
+        hero.draw(g, p);
 
         //townMap.paint(g, p);
         //hero.paint(g, p);
