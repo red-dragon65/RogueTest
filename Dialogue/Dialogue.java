@@ -12,17 +12,17 @@ public class Dialogue {
     private ImageIcon dialog;
 
     private boolean active;
-    private boolean yes;
+    private int offSetX = 0, offSetY = 0;
 
     private ArrayList<String> script;
+
+    private int messageLineLength = 25;
 
     //TODO make text  scroll
 
     //Constructor
     public Dialogue() {
         active = false;
-        yes = false;
-
         dialog = new ImageIcon(getClass().getResource("../Assets/Other/Dialogue/DialogBox.png"));
     }
 
@@ -50,7 +50,7 @@ public class Dialogue {
                 counter = 0;
                 script.add(" ");
 
-            } else if (counter < 25) {
+            } else if (counter < messageLineLength) {
                 m += tokens[i];
                 m += " ";
             } else {
@@ -121,14 +121,23 @@ public class Dialogue {
         active = true;
     }
 
+    public void offSetDraw(int x, int y) {
+
+        offSetX = x;
+        offSetY = y;
+    }
+
+    protected void disable() {
+        active = false;
+    }
 
     //Paint method
     public void draw(Graphics g, JPanel p) {
 
         //Max characters width: 25
 
-        int x = 500;
-        int y = 500;
+        int x = 500 + offSetX;
+        int y = 500 + offSetY;
         int size = 18;
         int padding = 10;
 

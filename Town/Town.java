@@ -217,12 +217,13 @@ public class Town {
         SpriteImage.paint(g, p, hero);
         SpriteImage.paint(g, p, townOverlay);
 
-        hero.draw(g, p);
 
         //townMap.paint(g, p);
         //hero.paint(g, p);
         //townOverlay.paint(g, p);
         npcs.paint(g, p);
+
+        hero.draw(g, p);
 
 
         //Draw dialog

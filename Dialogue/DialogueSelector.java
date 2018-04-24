@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-abstract class DialogueSelector {
+public class DialogueSelector {
 
 
     //Variables
@@ -18,15 +18,18 @@ abstract class DialogueSelector {
     protected String title;
     //Shown items
     protected ArrayList<String> selections;
+    protected ArrayList<String> description;
     //All items
     protected ArrayList<String> allOptions;
     protected int selectorFlag;
     private int maxSelection;
     private int page;
+    private int offSetX = 0, offSetY = 0;
 
     public String finalChoice;
-
     //TODO make text  scroll
+
+    protected Dialogue info;
 
 
     //Constructor
@@ -39,7 +42,7 @@ abstract class DialogueSelector {
 
         //Add all options to list
         allOptions = new ArrayList<>();
-
+        description = new ArrayList<>();
         selections = new ArrayList<>();
 
         selectorFlag = 0;
@@ -47,13 +50,21 @@ abstract class DialogueSelector {
 
         finalChoice = "";
 
+        info = new Dialogue();
+        //info.setImage("");
+        info.activate();
+        info.setMessage("");
+        info.offSetDraw(0, 300);
+
     }
 
     //Set items that will be shown
     protected void initializeList() {
 
-        int size;
-        size = 8;
+        selections.clear();
+
+        int size = 8;
+
         if (size > allOptions.size()) {
             size = allOptions.size();
         }
@@ -68,6 +79,10 @@ abstract class DialogueSelector {
         } else {
             maxSelection = size - 1;
         }
+
+        getPage();
+
+        updateInfo();
     }
 
     protected void run(InputListener in) {
@@ -129,7 +144,19 @@ abstract class DialogueSelector {
             getPage();
         }
 
+        updateInfo();
 
+
+    }
+
+    private void updateInfo() {
+
+        //Show selection information
+        if ((selectorFlag + (page * 8)) >= description.size() || selectorFlag < 0) {
+            info.setMessage("Description not available");
+        } else {
+            info.setMessage(description.get(selectorFlag + (page * 8)));
+        }
     }
 
     protected void setImage(ImageIcon image) {
@@ -158,12 +185,12 @@ abstract class DialogueSelector {
     }
 
     //Update items shown to user
-    private void getPage() {
+    protected void getPage() {
 
         int temp = page * 8;
 
-        int size;
-        size = 8;
+        int size = 8;
+
         if (size > allOptions.size()) {
             size = allOptions.size();
         }
@@ -194,14 +221,20 @@ abstract class DialogueSelector {
 
     }
 
+    //Offset Dialogue drawing
+    public void offSetDraw(int x, int y) {
+
+        offSetX = x;
+        offSetY = y;
+    }
 
     //Paint method
     protected void draw(Graphics g, JPanel p) {
 
         if (this.active) {
 
-            int x = 500;
-            int y = 500;
+            int x = 500 + offSetX;
+            int y = 500 + offSetY;
             int size = 18;
             int padding = 10;
             int spacing = 30;
@@ -228,6 +261,10 @@ abstract class DialogueSelector {
                 g.drawString(selections.get(i), x + 5 + padding, y + size + padding);
 
                 y += spacing;
+            }
+
+            if (info.isActive()) {
+                info.draw(g, p);
             }
 
         }

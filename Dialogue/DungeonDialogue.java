@@ -18,6 +18,7 @@ public class DungeonDialogue extends DialogueSelector {
 
         title = "Destinations:";
 
+        //TODO: load this from a file
         allOptions.add("Test Area");
         allOptions.add("Old Tower");
         allOptions.add("Forgotten Forest");
@@ -40,6 +41,31 @@ public class DungeonDialogue extends DialogueSelector {
         allOptions.add("*Ghost Stronghold");
         allOptions.add("*Riverside Ruins");
         allOptions.add("*Snowpeak Hideout");
+
+
+        //TODO: load this from a file
+        description.add("Dungeon for testing purposes.");
+        description.add("A tower from a forgotten era. It is said to hold a great secret.");
+        description.add("A dense forest watched over by a great spirit.");
+        description.add("Placeholder dungeon");
+        description.add("A huge cavern filled with lava. It was found under Turtle Rock.");
+        description.add("Placeholder dungeon");
+        description.add("Placeholder dungeon");
+        description.add("Placeholder dungeon");
+
+        description.add("Placeholder dungeon");
+        description.add("Placeholder dungeon");
+        description.add("Placeholder dungeon");
+        description.add("Placeholder dungeon");
+        description.add("Placeholder dungeon");
+        description.add("Placeholder dungeon");
+        description.add("Placeholder dungeon");
+        description.add("Placeholder dungeon");
+
+        description.add("Placeholder dungeon");
+        description.add("Placeholder dungeon");
+        description.add("Placeholder dungeon");
+        description.add("Placeholder dungeon");
 
         initializeList();
     }
