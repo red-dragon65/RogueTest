@@ -2,6 +2,7 @@ package RogueGame.Town;
 
 import RogueGame.Dialogue.Dialogue;
 import RogueGame.Dialogue.DungeonDialogue;
+import RogueGame.Dialogue.StoreDialogue;
 import RogueGame.InputListener;
 import RogueGame.Sprite.SpriteImage;
 
@@ -25,6 +26,8 @@ public class Town {
     //Dialogues
     private DungeonDialogue dungeonSelector;
     private Dialogue talk;
+
+    private StoreDialogue store;
 
     public String selectedDungeon;
 
@@ -59,6 +62,7 @@ public class Town {
         hero.resetLocation(mapMask);
 
         dungeonSelector = new DungeonDialogue();
+        store = new StoreDialogue();
 
         talk = new Dialogue();
     }
@@ -72,6 +76,11 @@ public class Town {
 
             hero.stop();
             talk.run(in);
+
+        } else if (store.isActive()) {
+
+            hero.stop();
+            store.run(in);
 
         } else if (dungeonSelector.isActive()) {
 
@@ -93,15 +102,20 @@ public class Town {
             if (in.checkInput("space") && hero.free) {
 
                 //Check for bounds || get data
-                String data = npcs.bounds(hero);
+                String[] data = npcs.bounds(hero); //Dialogue and name
 
-                //Activate dialogue if necessary
-                if (!data.equals("")) {
-
-                    talk.setMessage(data);
+                if (data[1].equals("Drake")) {
+                    //Blah
+                    talk.setMessage(data[0]);
+                    talk.activate();
+                    store.activate();
+                    in.bufferSpace();
+                } else if (!data[0].equals("")) {
+                    talk.setMessage(data[0]);
                     talk.activate();
                     in.bufferSpace();
                 }
+
 
             } else {
 
@@ -228,6 +242,11 @@ public class Town {
 
         //Draw dialog
         dungeonSelector.draw(g, p);
+
+
+        if (store.isActive() && !talk.isActive()) {
+            store.draw(g, p);
+        }
 
 
         //Draw dialogue

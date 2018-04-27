@@ -1,9 +1,12 @@
 package RogueGame.Dialogue;
 
 import RogueGame.InputListener;
+import RogueGame.ItemDB;
+import RogueGame.UserData;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class ActionMenu extends DialogueSelector {
 
@@ -12,8 +15,13 @@ public class ActionMenu extends DialogueSelector {
     //InventorySelector inventory;
     private static DialogueSelector inventory;
     private DialogueSelector options;
+    private DialogueSelector money;
 
     private ynMenu selected;
+    private String type;
+
+    private boolean init = true;
+
 
 
 
@@ -21,6 +29,8 @@ public class ActionMenu extends DialogueSelector {
         super();
 
         info.disable();
+
+        this.type = type;
 
         loadInventory(type);
 
@@ -42,10 +52,30 @@ public class ActionMenu extends DialogueSelector {
         setImage(new ImageIcon(getClass().getResource("../Assets/Other/Dialogue/MenuBox.png")));
 
         selected = new ynMenu();
+
+
+        money = new DialogueSelector();
+
+        money.title = "Money:";
+        money.info.disable();
+        money.setImage(new ImageIcon(getClass().getResource("../Assets/Other/Dialogue/Options.png")));
+        money.offSetDraw(150, 0);
+        money.initializeList();
+        money.activate();
     }
 
     public void run(InputListener in) {
 
+
+        if (this.isActive() && init) {
+
+            loadInventory(type);
+            init = false;
+
+            money.allOptions.clear();
+            money.allOptions.add("" + UserData.getMoney());
+            money.initializeList();
+        }
 
         if (inventory.isActive()) {
 
@@ -69,6 +99,12 @@ public class ActionMenu extends DialogueSelector {
         }
 
 
+        if (!this.isActive()) {
+            init = true;
+        }
+
+
+
         /*
 
         Inventory will handle ynMenu.
@@ -76,13 +112,13 @@ public class ActionMenu extends DialogueSelector {
         Inventory will handle ynMenu differently for dungeon, and town.
 
         In town:
-            - Item info can be shown
-            - Item can be thrown away
+            - ItemDB info can be shown
+            - ItemDB can be thrown away
 
         In dungeon:
-            - Item info can be shown
-            - Item can be used
-            - Item can be thrown away
+            - ItemDB info can be shown
+            - ItemDB can be used
+            - ItemDB can be thrown away
 
          */
 
@@ -112,25 +148,20 @@ public class ActionMenu extends DialogueSelector {
         inventory = new DialogueSelector();
         inventory.title = "Inventory";
 
-        //Todo: load this data from a file
-        //TODO: Items are objects that hold name and description data
-        inventory.allOptions.add("Oran Berry");
-        inventory.allOptions.add("Oran Berry");
-        inventory.allOptions.add("Blast Seed");
-        inventory.allOptions.add("Big Apple");
-        inventory.allOptions.add("Warp Orb");
 
-        inventory.description.add("A berry that heals the user.");
-        inventory.description.add("A berry that heals the user.");
-        inventory.description.add("Causes 50 damage. Range: 1 tile.");
-        inventory.description.add("Fills your belly 50%.");
-        inventory.description.add("Causes user to warp to a random room.");
+        //Load user data into UI
+        ArrayList<Integer> temp = UserData.getItems();
+
+        for (int i = 0; i < temp.size(); i++) {
+
+            inventory.allOptions.add(ItemDB.getItem(temp.get(i)));
+            inventory.description.add(ItemDB.getDescription(temp.get(i)));
+        }
 
         inventory.initializeList();
 
-
         options = new DialogueSelector();
-        options.setImage(new ImageIcon(getClass().getResource("../Assets/Other/Dialogue/MenuBox.png")));
+        options.setImage(new ImageIcon(getClass().getResource("../Assets/Other/Dialogue/Options.png")));
         options.info.disable();
         options.offSetDraw(150, 0);
         options.title = "Options";
@@ -148,9 +179,8 @@ public class ActionMenu extends DialogueSelector {
 
         if (options.isActive()) {
 
-            if (inventory.allOptions.size() > 0) {
-
-            } else {
+            //If inventory empty, don't run options
+            if (!(inventory.allOptions.size() > 0)) {
                 options.reset(in);
             }
 
@@ -162,12 +192,18 @@ public class ActionMenu extends DialogueSelector {
                     if (options.selections.get(options.selectorFlag).equals("Throw Away")) {
                         if (inventory.allOptions.size() > 0) {
 
+                            UserData.removeItem(inventory.selectorFlag);
                             inventory.allOptions.remove(inventory.selectorFlag);
                             inventory.description.remove(inventory.selectorFlag);
                             inventory.initializeList();
                             inventory.getPage();
                         }
                     }
+                }
+
+                if (!selected.isActive()) {
+
+                    options.reset(in);
                 }
 
             } else {
@@ -179,11 +215,9 @@ public class ActionMenu extends DialogueSelector {
 
                     switch (options.selections.get(options.selectorFlag)) {
                         case "Use":
-                            System.out.println("Use selected");
-
+                            //TODO: make this work
                             break;
                         case "Throw Away":
-                            System.out.println("Throw away selected");
                             selected.activate();
                             break;
                     }
@@ -199,9 +233,6 @@ public class ActionMenu extends DialogueSelector {
             inventory.run(in);
 
             if (in.checkInput("space")) {
-
-                //Todo: remove this test
-                //System.out.println(inventory.selections.get(inventory.selectorFlag));
 
                 if (inventory.allOptions.size() > 0) {
 
@@ -233,6 +264,10 @@ public class ActionMenu extends DialogueSelector {
 
             if (selected.isActive()) {
                 selected.draw(g, p);
+            }
+
+            if (money.isActive() && !inventory.isActive()) {
+                money.draw(g, p);
             }
         }
     }

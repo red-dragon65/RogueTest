@@ -22,6 +22,9 @@ import java.awt.event.ActionListener;
 public class Loop extends JPanel implements ActionListener {
 
 
+    private final ItemDB DB = new ItemDB();
+    private UserData data = new UserData();
+
     //Game loop
     private Timer gameLoop;
 

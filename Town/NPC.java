@@ -25,6 +25,10 @@ public class NPC extends SpriteImage {
         characterName = name;
     }
 
+    public String getName() {
+        return characterName;
+    }
+
 
 }
 
