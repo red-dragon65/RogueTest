@@ -126,7 +126,7 @@ public class DungeonHero extends SpriteImage {
 
             step++;
 
-            if (step == (24 / speed) + 1) {
+            if (step == (Tile.getSize() / speed) + 1) {
 
                 //If walk not possible
                 switch (type) {

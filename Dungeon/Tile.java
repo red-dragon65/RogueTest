@@ -161,6 +161,10 @@ public class Tile {
         return s.IMAGE.getIconWidth();
     }
 
+    public static int getSize() {
+        return tile.getIconHeight();
+    }
+
     //Method to put graphic onto panel.
     public static void paint(Graphics g, JPanel panel, Tile s, int x, int y) {
         if (s.IMAGE == null) {

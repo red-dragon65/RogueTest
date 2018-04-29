@@ -10,8 +10,6 @@ import java.util.ArrayList;
 
 public class ActionMenu extends DialogueSelector {
 
-    //Need dialogues for options below
-
     //InventorySelector inventory;
     private static DialogueSelector inventory;
     private DialogueSelector options;
@@ -21,6 +19,8 @@ public class ActionMenu extends DialogueSelector {
     private String type;
 
     private boolean init = true;
+
+    //TODO: add dialogues for all actions
 
 
 
@@ -154,11 +154,15 @@ public class ActionMenu extends DialogueSelector {
 
         for (int i = 0; i < temp.size(); i++) {
 
-            inventory.allOptions.add(ItemDB.getItem(temp.get(i)));
-            inventory.description.add(ItemDB.getDescription(temp.get(i)));
+            //inventory.allOptions.add(UserData.getItem(i));
+            inventory.allOptions.add(ItemDB.getItem(UserData.getItem(i)));
+
+            //inventory.allOptions.add(ItemDB.getItem(temp.get(i)));
+            inventory.description.add(ItemDB.getDescription(UserData.getItem(i)));
         }
 
         inventory.initializeList();
+
 
         options = new DialogueSelector();
         options.setImage(new ImageIcon(getClass().getResource("../Assets/Other/Dialogue/Options.png")));
@@ -192,6 +196,7 @@ public class ActionMenu extends DialogueSelector {
                     if (options.selections.get(options.selectorFlag).equals("Throw Away")) {
                         if (inventory.allOptions.size() > 0) {
 
+                            //Update inventory
                             UserData.removeItem(inventory.selectorFlag);
                             inventory.allOptions.remove(inventory.selectorFlag);
                             inventory.description.remove(inventory.selectorFlag);

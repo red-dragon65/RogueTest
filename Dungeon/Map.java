@@ -54,9 +54,7 @@ public class Map {
 
     }
 
-
-    //Initialize
-    public void init() {
+    public void initONE() {
 
         //Initialize map
         for (int i = 0; i < sizey; i++) {
@@ -71,13 +69,7 @@ public class Map {
             }
         }
 
-
         rooms();
-
-        halls();
-
-        advanceEdges();
-
 
         //Initialize collisionMap
         for (int i = 0; i < sizey; i++) {
@@ -91,8 +83,28 @@ public class Map {
                 }
             }
         }
+    }
+
+    public void initTWO() {
+
+        halls();
+
+        advanceEdges();
+
+
+        //Finish collisionMap initialization
+        for (int i = 0; i < sizey; i++) {
+            for (int z = 0; z < sizex; z++) {
+
+                if (matrix[i][z].getName().equals("dirt")) {
+                    collisionMask[i][z] = 1;
+                }
+            }
+        }
+
 
     }
+
 
     //Update tiles and map variables
     public void setMap(String type, int roomMin, int roomMax, int minRoomSizeY, int minRoomSizeX) {
@@ -517,40 +529,6 @@ public class Map {
 
             }
         }
-    }
-
-
-    public int[] getRandomRoom() {
-
-        int[] result = new int[4];
-        int[] loc = new int[2];
-        int[] temp = new int[2];
-        int[] tileMatrix = new int[2];
-
-        //Get random room
-        do {
-            loc[0] = gen.nextInt(3);
-            loc[1] = gen.nextInt(4);
-        } while (grid[loc[0]][loc[1]] != 1);
-
-/*
-//TODO: make sure matrix location is ground
-        do{
-            matrix[loc[0] * 16 + 8][loc[1] * 16 + 8];
-        }while();*/
-
-        tileMatrix[0] = loc[0] * 16 + 8;
-        tileMatrix[1] = loc[1] * 16 + 8;
-
-        temp[0] = tileMatrix[1] * Tile.getWidth(matrix[0][0]);
-        temp[1] = tileMatrix[0] * Tile.getHeight(matrix[0][0]);
-
-        result[0] = tileMatrix[0];
-        result[1] = tileMatrix[1];
-        result[2] = temp[0];
-        result[3] = temp[1];
-
-        return result;
     }
 
 }

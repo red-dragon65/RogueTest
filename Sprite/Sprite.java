@@ -86,6 +86,10 @@ abstract class Sprite {
         y += vy;
     }
 
+    public void hide() {
+        show = false;
+    }
+
 
 /////
 }

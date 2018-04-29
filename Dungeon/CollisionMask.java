@@ -37,6 +37,11 @@ public class CollisionMask {
         mask[loc[0]][loc[1]] = 5;
     }
 
+    public int[] getHeroLoc() {
+
+        return heroLoc;
+    }
+
 
     //Update hero position on collision mask
     public void updateHero(String walk) {
@@ -91,7 +96,8 @@ public class CollisionMask {
         mask[loc[0]][loc[1]] = 3;
     }
 
-/*
+
+    /*
     //TODO: Disable this test code
     //Draws mask to terminal
     public void showMask() {
@@ -110,6 +116,6 @@ public class CollisionMask {
             System.out.print("\n");
         }
         System.out.flush();
-    }
-*/
+    }*/
+
 }

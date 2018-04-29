@@ -18,7 +18,6 @@ public class StoreDialogue extends DialogueSelector {
     private DialogueSelector money;
 
     private final int maxItems = 8;
-    private final int itemRange = 4;
 
 
     public StoreDialogue() {
@@ -35,7 +34,7 @@ public class StoreDialogue extends DialogueSelector {
 
         for (int i = 0; i < maxItems; i++) {
 
-            itemID.add(gen.nextInt(itemRange));
+            itemID.add(gen.nextInt(ItemDB.itemMaxRange) + ItemDB.itemMinRange);
         }
 
         itemID.sort(Integer::compareTo);
@@ -46,8 +45,8 @@ public class StoreDialogue extends DialogueSelector {
             description.add(ItemDB.getDescription(itemID.get(i)));
         }
 
-
         initializeList();
+
 
         options = new DialogueSelector();
         options.setImage(new ImageIcon(getClass().getResource("../Assets/Other/Dialogue/Options.png")));
@@ -58,8 +57,8 @@ public class StoreDialogue extends DialogueSelector {
         options.allOptions.add("Buy");
         options.initializeList();
 
-        selected = new ynMenu();
 
+        selected = new ynMenu();
 
         money = new DialogueSelector();
 

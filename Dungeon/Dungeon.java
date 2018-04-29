@@ -2,10 +2,13 @@ package RogueGame.Dungeon;
 
 import RogueGame.Dialogue.BoolDialogue;
 import RogueGame.InputListener;
+import RogueGame.ItemDB;
 import RogueGame.Sprite.SpriteImage;
+import RogueGame.UserData;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Random;
 
 
 public class Dungeon {
@@ -17,6 +20,12 @@ public class Dungeon {
     //Character sprites
     private DungeonHero hero;
     private SpriteImage stairs;
+    private SpriteImage[] items;
+    private int numItems;
+    private int[][] itemLoc;
+    private int[] itemID;
+
+    private Random gen = new Random();
 
     //Sprite images.
     private ImageIcon heroImg;
@@ -43,8 +52,10 @@ public class Dungeon {
         map = new Map();
         mask = new CollisionMask(map.collisionMask, map.getSizeX(), map.getSizeY());
 
+        //Initialize sprites
         hero = new DungeonHero();
         stairs = new SpriteImage();
+
 
         heroImg = new ImageIcon(getClass().getResource("../Assets/Other/Characters/hero.png"));
         stairsImg = new ImageIcon(getClass().getResource("../Assets/Other/Characters/red.png"));
@@ -56,29 +67,50 @@ public class Dungeon {
 
         dungeonFinished = true;
 
+
+        stairsDialogue.setMessage("Do you want to continue?");
+
     }
 
 
     //Re-initializer
     public void init(String dungeonType) {
 
+        //(This codes runs once per selected dungeon)
+
         setDungeon(dungeonType);
 
         mask = new CollisionMask(map.collisionMask, map.getSizeX(), map.getSizeY());
 
-        //Initialize location
-        mask.setStairs(randomLoc(stairs));
-        do {
-            hero.matLoc = randomLoc(hero);
-        } while (stairs.getX() == hero.getX() && stairs.getY() == hero.getY());
 
-        mask.setHero(hero.matLoc);
+        //Initialize items
+        items = new SpriteImage[numItems];
+        itemLoc = new int[numItems][2];
+        itemID = new int[numItems];
+
+        //Initialize items
+        for (int i = 0; i < numItems; i++) {
+            items[i] = new SpriteImage();
+        }
+
+        //Generate item types
+        for (int i = 0; i < numItems; i++) {
+            itemID[i] = (gen.nextInt(ItemDB.itemMaxRange + 1) + ItemDB.itemMinRange - 1);
+        }
+
+        //Initialize item images
+        for (int i = 0; i < numItems; i++) {
+
+            items[i] = new SpriteImage(new ImageIcon(getClass().getResource(ItemDB.getImage(itemID[i]))));
+        }
+
+
+        initMap();
 
         currentFloor = 1;
 
         dungeonFinished = false;
 
-        stairsDialogue.setMessage("Do you want to continue?");
     }
 
     //Set variables for dungeon, tiles, and map according to user selection
@@ -96,50 +128,77 @@ public class Dungeon {
             case "Test Area":
                 map.setMap("TestArea", 2, 4, 6, 6);
                 maxFloors = 2;
+                numItems = 3;
                 break;
             case "Forgotten Forest":
                 map.setMap("ForgottenForest", 4, 7, 7, 9);
                 maxFloors = 3;
+                numItems = 6;
                 break;
             case "Old Tower":
                 map.setMap("OldTower", 7, 9, 9, 4);
                 maxFloors = 4;
+                numItems = 8;
                 break;
             case "Lava Delta":
                 //map.setMap("LavaDelta", 9, 12, 4, 4);
                 map.setMap("LavaDelta", 12, 12, 9, 9);
                 maxFloors = 5;
+                numItems = 12;
                 break;
             default:
                 map.setMap("TestArea", 2, 5, 6, 6);
                 maxFloors = 2;
+                numItems = 4;
 
         }
 
-        map.init();
+    }
+
+    public void initMap() {
+
+        //Init rooms
+        map.initONE();
+        mask.updateMask(map.collisionMask);
+
+        //Set sprites
+        mask.setStairs(randomLoc(stairs));
+
+        hero.matLoc = randomLoc(hero);
+        mask.setHero(hero.matLoc);
+
+
+        //Set items
+        int[] temp;
+        for (int i = 0; i < numItems; i++) {
+
+            temp = randomLoc(items[i]);
+
+            itemLoc[i][0] = temp[0];
+            itemLoc[i][1] = temp[1];
+        }
+
+
+        //Finish init
+        map.initTWO();
+        mask.updateMask(map.collisionMask);
     }
 
 
     //Generate next floor
     private void newFloor() {
 
+        System.out.println("Floor loading");
+
         currentFloor++;
 
         if (!checkDungeon()) {
 
-            map.init();
-            mask.updateMask(map.collisionMask);
+            initMap();
 
-            mask.setStairs(randomLoc(stairs));
-            do {
-                hero.matLoc = randomLoc(hero);
-            } while (stairs.getX() == hero.getX() && stairs.getY() == hero.getY());
-
-            mask.setHero(hero.matLoc);
         } else {
             Tile.init = false;
         }
-
     }
 
 
@@ -253,9 +312,38 @@ public class Dungeon {
 
         }
 
-        //Check if dialogue can be shown
+        //Load dialogue if hero on stairs
         if (!mask.onStairs())
             loadStairsDialogue = true;
+
+
+        int[] temp = mask.getHeroLoc();
+
+        //Check if hero on item
+        for (int i = 0; i < numItems; i++) {
+
+            if (temp[0] == itemLoc[i][0] && temp[1] == itemLoc[i][1]) {
+
+                //Add item (exclude money, and 0 ID)
+                if (itemID[i] > 1) {
+                    UserData.addItem(itemID[i]);
+                }
+
+                //Add money
+                if (itemID[i] == 1) {
+
+                    UserData.addMoney(gen.nextInt(50));
+                }
+
+                items[i].hide();
+                itemLoc[i][0] = 0;
+                itemLoc[i][1] = 0;
+                itemID[i] = 0;
+
+                System.out.println("Stepping on item! " + i);
+                break;
+            }
+        }
 
 
 
@@ -374,6 +462,15 @@ public class Dungeon {
         }
 
 
+        //Draw items to screen
+        if (numItems != 0) {
+            for (int i = 0; i < numItems; i++) {
+
+                if (items[i] != null) {
+                    SpriteImage.paint(g, p, items[i]);
+                }
+            }
+        }
 
 
         //Draw stairs
@@ -389,28 +486,32 @@ public class Dungeon {
     }
 
 
-    //Randomize sprite location
     private int[] randomLoc(SpriteImage h) {
 
-        //Collision map info
+
+        //Collision map location info
         int[] cM = new int[2];
 
         //Sprite image location
-        int[] temp = new int[2];
+        int[] xyLoc = new int[2];
 
-        //Get data from map
-        int[] result = map.getRandomRoom();
-        cM[0] = result[0];
-        cM[1] = result[1];
-        temp[0] = result[2];
-        temp[1] = result[3];
+        //Get random tile
+        do {
+            cM[1] = gen.nextInt(map.getSizeX());
+            cM[0] = gen.nextInt(map.getSizeY());
 
-        //Set hero starting location.
-        h.setX(temp[0]);
-        h.setY(temp[1]);
+        } while (!map.matrix[cM[0]][cM[1]].getName().equals("dirt"));
+
+        xyLoc[0] = cM[1] * Tile.getWidth(map.matrix[0][0]);
+        xyLoc[1] = cM[0] * Tile.getHeight(map.matrix[0][0]);
+
+        //Set sprite location. (x, y)
+        h.setX(xyLoc[0]);
+        h.setY(xyLoc[1]);
 
         return cM;
     }
+
 
     //Check for finished dungeon
     public boolean checkDungeon() {

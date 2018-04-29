@@ -9,6 +9,15 @@ public class SpriteImage extends Sprite {
     //Set sprite image
     protected ImageIcon IMAGE;
 
+    public SpriteImage() {
+
+    }
+
+    public SpriteImage(ImageIcon img) {
+
+        IMAGE = img;
+    }
+
     /*
      * Setters.
      */

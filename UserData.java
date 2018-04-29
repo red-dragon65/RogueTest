@@ -23,11 +23,11 @@ public class UserData {
             itemsID = new ArrayList<>();
 
             money = 500;
-            itemsID.add(0);
-            itemsID.add(0);
-            itemsID.add(1);
+            itemsID.add(2);
             itemsID.add(2);
             itemsID.add(3);
+            itemsID.add(4);
+            itemsID.add(5);
 
 
             itemsID.sort(Integer::compareTo);
@@ -41,13 +41,22 @@ public class UserData {
     }
 
     public static void addItem(int ID) {
-        itemsID.add(ID);
-        itemsID.sort(Integer::compareTo);
+
+        //Don't add money to inventory
+        if (ID != 1) {
+            itemsID.add(ID);
+            itemsID.sort(Integer::compareTo);
+        }
     }
 
     public static void removeItem(int index) {
 
         itemsID.remove(index);
+    }
+
+    public static int getItem(int index) {
+
+        return itemsID.get(index);
     }
 
     public static void addMoney(int amount) {
