@@ -15,10 +15,14 @@ public class ActionMenu extends DialogueSelector {
     private DialogueSelector options;
     private DialogueSelector money;
 
+    //Dialogues
     private ynMenu selected;
     private String type;
 
+
     private boolean init = true;
+
+    public int selectedItem = -1;
 
     //TODO: add dialogues for all actions
 
@@ -105,22 +109,6 @@ public class ActionMenu extends DialogueSelector {
 
 
 
-        /*
-
-        Inventory will handle ynMenu.
-
-        Inventory will handle ynMenu differently for dungeon, and town.
-
-        In town:
-            - ItemDB info can be shown
-            - ItemDB can be thrown away
-
-        In dungeon:
-            - ItemDB info can be shown
-            - ItemDB can be used
-            - ItemDB can be thrown away
-
-         */
 
         /*
 
@@ -154,11 +142,19 @@ public class ActionMenu extends DialogueSelector {
 
         for (int i = 0; i < temp.size(); i++) {
 
-            //inventory.allOptions.add(UserData.getItem(i));
             inventory.allOptions.add(ItemDB.getItem(UserData.getItem(i)));
 
-            //inventory.allOptions.add(ItemDB.getItem(temp.get(i)));
-            inventory.description.add(ItemDB.getDescription(UserData.getItem(i)));
+            String description = ItemDB.getDescription(UserData.getItem(i));
+
+            if (ItemDB.getItemStats(UserData.getItem(i))[0] != 0)
+                description += " AP: " + ItemDB.getItemStats(UserData.getItem(i))[0];
+            if (ItemDB.getItemStats(UserData.getItem(i))[1] != 0)
+                description += " HP: " + ItemDB.getItemStats(UserData.getItem(i))[1];
+            if (ItemDB.getItemStats(UserData.getItem(i))[2] != 0)
+                description += " DMG: " + ItemDB.getItemStats(UserData.getItem(i))[2];
+
+
+            inventory.description.add(description);
         }
 
         inventory.initializeList();
@@ -206,6 +202,24 @@ public class ActionMenu extends DialogueSelector {
                     }
                 }
 
+                if (selected.yes) {
+                    if (options.selections.get(options.selectorFlag).equals("Use")) {
+                        if (inventory.allOptions.size() > 0) {
+
+
+                            //Update item selected
+                            selectedItem = UserData.getItem(inventory.selectorFlag);
+
+                            //Update inventory
+                            UserData.removeItem(inventory.selectorFlag);
+                            inventory.allOptions.remove(inventory.selectorFlag);
+                            inventory.description.remove(inventory.selectorFlag);
+                            inventory.initializeList();
+                            inventory.getPage();
+                        }
+                    }
+                }
+
                 if (!selected.isActive()) {
 
                     options.reset(in);
@@ -221,6 +235,7 @@ public class ActionMenu extends DialogueSelector {
                     switch (options.selections.get(options.selectorFlag)) {
                         case "Use":
                             //TODO: make this work
+                            selected.activate();
                             break;
                         case "Throw Away":
                             selected.activate();

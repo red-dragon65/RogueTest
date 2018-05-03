@@ -90,6 +90,10 @@ abstract class Sprite {
         show = false;
     }
 
+    public void show() {
+        show = true;
+    }
+
 
 /////
 }

@@ -26,6 +26,11 @@ public class Dialogue {
         dialog = new ImageIcon(getClass().getResource("../Assets/Other/Dialogue/DialogBox.png"));
     }
 
+    public Dialogue(ImageIcon image) {
+        active = false;
+        dialog = image;
+    }
+
 
     //Set message
     public void setMessage(String message) {

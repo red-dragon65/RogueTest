@@ -93,17 +93,6 @@ public class Dungeon {
             items[i] = new SpriteImage();
         }
 
-        //Generate item types
-        for (int i = 0; i < numItems; i++) {
-            itemID[i] = (gen.nextInt(ItemDB.itemMaxRange + 1) + ItemDB.itemMinRange - 1);
-        }
-
-        //Initialize item images
-        for (int i = 0; i < numItems; i++) {
-
-            items[i] = new SpriteImage(new ImageIcon(getClass().getResource(ItemDB.getImage(itemID[i]))));
-        }
-
 
         initMap();
 
@@ -177,6 +166,20 @@ public class Dungeon {
             itemLoc[i][0] = temp[0];
             itemLoc[i][1] = temp[1];
         }
+
+        //Generate item types
+        for (int i = 0; i < numItems; i++) {
+            itemID[i] = (gen.nextInt(ItemDB.itemMaxRange + 1) + ItemDB.itemMinRange - 1);
+        }
+
+        //Initialize item images
+        for (int i = 0; i < numItems; i++) {
+
+            //items[i] = new SpriteImage(new ImageIcon(getClass().getResource(ItemDB.getImage(itemID[i]))));
+            items[i].setIMAGE(new ImageIcon(getClass().getResource(ItemDB.getImage(itemID[i]))));
+            items[i].show();
+        }
+
 
 
         //Finish init

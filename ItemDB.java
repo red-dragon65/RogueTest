@@ -6,10 +6,10 @@ import java.util.ArrayList;
 public class ItemDB {
 
     private static ArrayList<String> name, description;
-    private static ArrayList<Integer> ID, price;
     private static ArrayList<String> imageURL;
-    //private static String[] name, description;
-    //private static int[] ID, price;
+    private static ArrayList<Integer> ID, price;
+    private static ArrayList<Integer> ap, hp, dmg;
+
     private static boolean init = true;
 
     public static final int itemMinRange = 2;
@@ -36,6 +36,9 @@ public class ItemDB {
             ID = new ArrayList<>();
             price = new ArrayList<>();
             imageURL = new ArrayList<>();
+            ap = new ArrayList<>();
+            hp = new ArrayList<>();
+            dmg = new ArrayList<>();
 
 
             ID.add(1);
@@ -43,30 +46,46 @@ public class ItemDB {
             description.add("It's money!");
             price.add(-1);
             imageURL.add("../Assets/Other/Characters/yellow.png");
+            ap.add(0);
+            hp.add(0);
+            dmg.add(0);
+
 
             ID.add(2);
             name.add("Oran Berry");
             description.add("A berry that heals the user.");
             price.add(50);
             imageURL.add("../Assets/Other/Characters/blue.png");
+            ap.add(0);
+            hp.add(30);
+            dmg.add(0);
 
             ID.add(3);
             name.add("Blast Seed");
             description.add("Causes 50 damage. Range: 1 tile.");
             price.add(150);
             imageURL.add("../Assets/Other/Characters/purple.png");
+            ap.add(-10);
+            hp.add(0);
+            dmg.add(150);
 
             ID.add(4);
             name.add("Big Apple");
             description.add("Fills your belly 50%.");
             price.add(200);
             imageURL.add("../Assets/Other/Characters/green.png");
+            ap.add(30);
+            hp.add(5);
+            dmg.add(0);
 
             ID.add(5);
             name.add("Warp Orb");
             description.add("Causes user to warp to a random room.");
             price.add(350);
             imageURL.add("../Assets/Other/Characters/green.png");
+            ap.add(0);
+            hp.add(0);
+            dmg.add(0);
 
 
 
@@ -129,5 +148,26 @@ public class ItemDB {
         }
 
         return imageURL.get(temp);
+    }
+
+    public static int[] getItemStats(int id) {
+
+        int temp = 0;
+
+        for (int i = 0; i < ID.size(); i++) {
+            if (ID.get(i) == id) {
+                temp = i;
+                break;
+            }
+        }
+
+
+        int[] tempy = new int[3];
+
+        tempy[0] = ap.get(temp);
+        tempy[1] = hp.get(temp);
+        tempy[2] = dmg.get(temp);
+
+        return tempy;
     }
 }

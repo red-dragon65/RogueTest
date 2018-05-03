@@ -6,9 +6,9 @@ public class UserData {
 
     private static ArrayList<Integer> itemsID;
     private static int money;
+    private static int[] stats;
 
     //TODO: add other user data
-    //private static int[] stats;
     //private static String[] Missions;
 
     private static boolean init = true;
@@ -22,15 +22,25 @@ public class UserData {
             //TODO: load this data from a file
             itemsID = new ArrayList<>();
 
-            money = 500;
             itemsID.add(2);
             itemsID.add(2);
             itemsID.add(3);
             itemsID.add(4);
             itemsID.add(5);
 
-
             itemsID.sort(Integer::compareTo);
+
+
+            money = 500;
+
+
+            stats = new int[4];
+            stats[0] = 5; //level
+            stats[1] = 30; //exp
+            stats[2] = 45; //health
+            stats[3] = 50; //ap
+
+
             init = false;
         }
 
@@ -69,6 +79,10 @@ public class UserData {
 
     public static int getMoney() {
         return money;
+    }
+
+    public static int[] getStats() {
+        return stats;
     }
 
 }
