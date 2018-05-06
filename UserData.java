@@ -7,6 +7,7 @@ public class UserData {
     private static ArrayList<Integer> itemsID;
     private static int money;
     private static int[] stats;
+    private static int[] attacks;
 
     //TODO: add other user data
     //private static String[] Missions;
@@ -36,9 +37,15 @@ public class UserData {
 
             stats = new int[4];
             stats[0] = 5; //level
-            stats[1] = 30; //exp
-            stats[2] = 45; //health
-            stats[3] = 50; //ap
+            stats[1] = 50; //exp
+            stats[2] = 100; //health
+            stats[3] = 60; //ap
+
+            attacks = new int[4];
+            attacks[0] = 1;
+            attacks[1] = 2;
+            attacks[2] = 3;
+            attacks[3] = 4;
 
 
             init = false;
@@ -83,6 +90,10 @@ public class UserData {
 
     public static int[] getStats() {
         return stats;
+    }
+
+    public static int[] getAttacks() {
+        return attacks;
     }
 
 }

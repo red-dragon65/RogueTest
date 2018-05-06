@@ -24,7 +24,7 @@ public class DungeonHero extends SpriteImage {
     int[] matLoc;
 
     //Stats
-    private Stats stats;
+    public Stats stats;
 
     //Dialogues
     private boolean showMenu;
@@ -32,6 +32,8 @@ public class DungeonHero extends SpriteImage {
 
     //Stats GUI
     private Dialogue[] statGUI;
+
+    public boolean done = false;
 
 
     /*
@@ -47,7 +49,7 @@ public class DungeonHero extends SpriteImage {
         menu = new ActionMenu("dungeon");
 
         //Set hero stats
-        stats = new Stats(UserData.getStats());
+        stats = new Stats(UserData.getStats(), UserData.getAttacks());
 
         statGUI = new Dialogue[3];
         for (int i = 0; i < 3; i++) {
@@ -76,6 +78,7 @@ public class DungeonHero extends SpriteImage {
     //Move with bounds.
     protected void act(InputListener in, CollisionMask mask) {
 
+        setStatGUI();
 
         if (showMenu && menu.isActive()) {
 
@@ -106,33 +109,46 @@ public class DungeonHero extends SpriteImage {
                 if (ItemDB.getItemStats(temp)[2] != 0) {
 
                     //Stop menu
-                    //Apply damage to enemy TODO: make this work like a regular hero attack
+                    //Apply item damage to enemy TODO: make this work like a regular hero attack
                 }
 
                 //Reset selected item
                 menu.selectedItem = -1;
 
                 setStatGUI();
-
             }
 
+            if (menu.selectedAttackType > 0) {
+
+
+                System.out.println(menu.selectedAttackType + " " + menu.selectedAttackX + " " + menu.selectedAttackY);
+
+
+                //TODO: LOAD RANGE DATA HERE!
+                int tempAttack = 3;
+
+                int x = mask.getHeroLoc()[1];
+                x++;
+                int y = mask.getHeroLoc()[0];
+
+                mask.addAttack(x, y, tempAttack);
+                done = true;
+
+                System.out.println("Attack has been set");
+                System.out.println("Hero Loc: " + x + " " + y);
+
+                menu.selectedAttackType = -1;
+            }
 
         } else {
 
-            //Check for inputs
-            if (in.checkInput("escape")) {
+
+            if (in.checkInput("escape")) { //Check for inputs
 
                 //Activate menu
                 in.bufferEsc();
                 showMenu = true;
                 menu.activate();
-
-                //TODO: remove this test code
-                System.out.println("\n");
-                System.out.println("Level: " + stats.getLevel());
-                System.out.println("EXP: " + stats.getEXP()[0] + " Limit: " + stats.getEXP()[1]);
-                System.out.println("Health: " + stats.getHealth()[0] + " Limit: " + stats.getHealth()[1]);
-                System.out.println("AP: " + stats.getAP()[0] + " Limit: " + stats.getAP()[1]);
 
             } else {
 
@@ -203,6 +219,7 @@ public class DungeonHero extends SpriteImage {
 
             step++;
 
+            //Let hero only walk one tile at a time
             if (step == (Tile.getSize() / speed) + 1) {
 
                 //If walk not possible
@@ -230,6 +247,8 @@ public class DungeonHero extends SpriteImage {
                 }
 
                 step = 0;
+
+                done = true;
 
             } else {
 

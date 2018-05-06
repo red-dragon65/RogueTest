@@ -94,6 +94,10 @@ abstract class Sprite {
         show = true;
     }
 
+    public boolean showing() {
+        return show;
+    }
+
 
 /////
 }

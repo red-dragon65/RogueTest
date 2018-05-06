@@ -1,5 +1,6 @@
 package RogueGame.Dialogue;
 
+import RogueGame.Dungeon.AttackDB;
 import RogueGame.InputListener;
 import RogueGame.ItemDB;
 import RogueGame.UserData;
@@ -12,6 +13,7 @@ public class ActionMenu extends DialogueSelector {
 
     //InventorySelector inventory;
     private static DialogueSelector inventory;
+    private static DialogueSelector attackSelector;
     private DialogueSelector options;
     private DialogueSelector money;
 
@@ -23,6 +25,10 @@ public class ActionMenu extends DialogueSelector {
     private boolean init = true;
 
     public int selectedItem = -1;
+
+    public int selectedAttackType = -1;
+    public int selectedAttackX = 0;
+    public int selectedAttackY = 0;
 
     //TODO: add dialogues for all actions
 
@@ -85,12 +91,19 @@ public class ActionMenu extends DialogueSelector {
 
             runInventory(in);
 
+        } else if (attackSelector.isActive()) {
+
+            runAttack(in);
+
         } else if (in.checkInput("space")) {
 
             //Load specified dialogue
             switch (selections.get(selectorFlag)) {
                 case "Inventory":
                     inventory.activate();
+                    break;
+                case "Attack":
+                    attackSelector.activate();
                     break;
             }
 
@@ -100,6 +113,8 @@ public class ActionMenu extends DialogueSelector {
 
             //Run this menu
             super.run(in);
+
+
         }
 
 
@@ -136,7 +151,6 @@ public class ActionMenu extends DialogueSelector {
         inventory = new DialogueSelector();
         inventory.title = "Inventory";
 
-
         //Load user data into UI
         ArrayList<Integer> temp = UserData.getItems();
 
@@ -144,20 +158,22 @@ public class ActionMenu extends DialogueSelector {
 
             inventory.allOptions.add(ItemDB.getItem(UserData.getItem(i)));
 
-            String description = ItemDB.getDescription(UserData.getItem(i));
+            String description = "";
 
             if (ItemDB.getItemStats(UserData.getItem(i))[0] != 0)
-                description += " AP: " + ItemDB.getItemStats(UserData.getItem(i))[0];
+                description += "AP: " + ItemDB.getItemStats(UserData.getItem(i))[0] + " ";
             if (ItemDB.getItemStats(UserData.getItem(i))[1] != 0)
-                description += " HP: " + ItemDB.getItemStats(UserData.getItem(i))[1];
+                description += "HP: " + ItemDB.getItemStats(UserData.getItem(i))[1] + " ";
             if (ItemDB.getItemStats(UserData.getItem(i))[2] != 0)
-                description += " DMG: " + ItemDB.getItemStats(UserData.getItem(i))[2];
+                description += "DMG: " + ItemDB.getItemStats(UserData.getItem(i))[2] + " ";
 
+            description += ItemDB.getDescription(UserData.getItem(i));
 
             inventory.description.add(description);
         }
 
         inventory.initializeList();
+
 
 
         options = new DialogueSelector();
@@ -172,6 +188,23 @@ public class ActionMenu extends DialogueSelector {
         options.allOptions.add("Throw Away");
 
         options.initializeList();
+
+
+        attackSelector = new DialogueSelector();
+        attackSelector.title = "Moves";
+
+        attackSelector.allOptions.add(AttackDB.getName(UserData.getAttacks()[0]));
+        attackSelector.allOptions.add(AttackDB.getName(UserData.getAttacks()[1]));
+        attackSelector.allOptions.add(AttackDB.getName(UserData.getAttacks()[2]));
+        attackSelector.allOptions.add(AttackDB.getName(UserData.getAttacks()[3]));
+
+        attackSelector.description.add(AttackDB.getDescription(UserData.getAttacks()[0]));
+        attackSelector.description.add(AttackDB.getDescription(UserData.getAttacks()[1]));
+        attackSelector.description.add(AttackDB.getDescription(UserData.getAttacks()[2]));
+        attackSelector.description.add(AttackDB.getDescription(UserData.getAttacks()[3]));
+
+        attackSelector.initializeList();
+
     }
 
     //Inventory logic
@@ -234,7 +267,6 @@ public class ActionMenu extends DialogueSelector {
 
                     switch (options.selections.get(options.selectorFlag)) {
                         case "Use":
-                            //TODO: make this work
                             selected.activate();
                             break;
                         case "Throw Away":
@@ -266,6 +298,26 @@ public class ActionMenu extends DialogueSelector {
 
     }
 
+    public void runAttack(InputListener in) {
+
+        attackSelector.run(in);
+
+        if (in.checkInput("space")) {
+
+            if (attackSelector.allOptions.size() > 0) {
+
+                selectedAttackType = UserData.getAttacks()[attackSelector.selectorFlag];
+
+                attackSelector.reset(in);
+                this.reset(in);
+
+                //TODO: run range selector here
+            }
+
+            in.bufferSpace();
+        }
+    }
+
     //Paint method
     public void draw(Graphics g, JPanel p) {
 
@@ -286,8 +338,12 @@ public class ActionMenu extends DialogueSelector {
                 selected.draw(g, p);
             }
 
-            if (money.isActive() && !inventory.isActive()) {
+            if (money.isActive() && !inventory.isActive() && !attackSelector.isActive()) {
                 money.draw(g, p);
+            }
+
+            if (attackSelector.isActive()) {
+                attackSelector.draw(g, p);
             }
         }
     }

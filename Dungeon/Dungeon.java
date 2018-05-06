@@ -43,6 +43,13 @@ public class Dungeon {
     private boolean loadStairsDialogue = true;
 
 
+    //Enemies
+    private Enemy[] foes;
+    private int numEnemies;
+
+    private boolean enemyTurn = false, heroTurn = true;
+
+
 
     /*
     Default constructor.
@@ -88,9 +95,15 @@ public class Dungeon {
         itemLoc = new int[numItems][2];
         itemID = new int[numItems];
 
-        //Initialize items
         for (int i = 0; i < numItems; i++) {
             items[i] = new SpriteImage();
+        }
+
+        //Initialize enemies
+        foes = new Enemy[numEnemies];
+
+        for (int i = 0; i < numEnemies; i++) {
+            foes[i] = new Enemy();
         }
 
 
@@ -118,27 +131,32 @@ public class Dungeon {
                 map.setMap("TestArea", 2, 4, 6, 6);
                 maxFloors = 2;
                 numItems = 3;
+                numEnemies = 2;
                 break;
             case "Forgotten Forest":
                 map.setMap("ForgottenForest", 4, 7, 7, 9);
                 maxFloors = 3;
                 numItems = 6;
+                numEnemies = 4;
                 break;
             case "Old Tower":
                 map.setMap("OldTower", 7, 9, 9, 4);
                 maxFloors = 4;
                 numItems = 8;
+                numEnemies = 7;
                 break;
             case "Lava Delta":
                 //map.setMap("LavaDelta", 9, 12, 4, 4);
                 map.setMap("LavaDelta", 12, 12, 9, 9);
                 maxFloors = 5;
                 numItems = 12;
+                numEnemies = 12;
                 break;
             default:
                 map.setMap("TestArea", 2, 5, 6, 6);
                 maxFloors = 2;
                 numItems = 4;
+                numEnemies = 2;
 
         }
 
@@ -175,16 +193,32 @@ public class Dungeon {
         //Initialize item images
         for (int i = 0; i < numItems; i++) {
 
-            //items[i] = new SpriteImage(new ImageIcon(getClass().getResource(ItemDB.getImage(itemID[i]))));
             items[i].setIMAGE(new ImageIcon(getClass().getResource(ItemDB.getImage(itemID[i]))));
             items[i].show();
         }
 
 
+        //Enemy location
+        int[][] tempLoc = new int[numEnemies][2];
+
+        //Set Enemies
+        for (int i = 0; i < numEnemies; i++) {
+
+            //Location
+            tempLoc[i] = randomLoc(foes[i]);
+
+            //Type / image
+            foes[i].setType(gen.nextInt(5));
+        }
+
 
         //Finish init
         map.initTWO();
         mask.updateMask(map.collisionMask);
+
+
+        //Update enemy locations
+        mask.setEnemyLoc(tempLoc);
     }
 
 
@@ -310,14 +344,64 @@ public class Dungeon {
 
         } else {
 
+            /*
             //Run hero
             hero.act(in, mask);
+            */
+
+
+            //Run hero
+            if (heroTurn) {
+
+                hero.act(in, mask);
+
+                if (hero.done) { //Hero is either done moving one tile, or hero has set attack
+                    //Taking damage does not affect "done" status
+                    enemyTurn = true;
+                    heroTurn = false;
+                    Enemy.done = false;
+                }
+
+            }
+
+
+            //Run enemy
+            if (enemyTurn) {
+
+                for (int i = 0; i < numEnemies; i++) {
+                    foes[i].act(in, mask, i);
+
+                    if (foes[i].dead && foes[i].showing()) {
+
+                        //Get enemy exp
+                        hero.stats.updateEXP(foes[i].stats.getEXP()[1]);
+
+                        //Remove enemy
+                        foes[i].hide();
+                        mask.disableEnemy(i);
+                    }
+                }
+
+
+                if (Enemy.done) {
+                    enemyTurn = false;
+                    heroTurn = true;
+                    hero.done = false;
+                }
+
+            }
+
+
+            //Clear any remaining attacks
+            mask.resetAttacks();
 
         }
+
 
         //Load dialogue if hero on stairs
         if (!mask.onStairs())
             loadStairsDialogue = true;
+
 
 
         int[] temp = mask.getHeroLoc();
@@ -343,7 +427,6 @@ public class Dungeon {
                 itemLoc[i][1] = 0;
                 itemID[i] = 0;
 
-                System.out.println("Stepping on item! " + i);
                 break;
             }
         }
@@ -366,7 +449,6 @@ public class Dungeon {
         if(collisionMap.stairs == collisionMap.hero)
             stairs.init();
 
-
          */
 
 
@@ -383,33 +465,6 @@ public class Dungeon {
          - One for item layout
          - One for attack layout
          - One for enemy layout
-
-
-
-        TODO
-        Hero act method
-        CollisionMap class
-
-
-        *Map returns matrix
-
-        *Matrix initializes collisionMap.layout
-
-
-        Hero location goes into collisionMap.characters
-
-        Stairs location goes into collisionMap.characters
-
-
-        Hero moves:
-            - Check collision map if you can move
-            - If yes, update hero loc in collision map
-            - If no, don't do anything
-
-        Check if hero and stairs have same location.
-        If yes, show dialogue
-
-
 
         */
 
@@ -476,12 +531,19 @@ public class Dungeon {
         }
 
 
+        //Draw enemies
+        for (int i = 0; i < numEnemies; i++) {
+            SpriteImage.paint(g, p, foes[i]);
+        }
+
+
         //Draw stairs
         SpriteImage.paint(g, p, stairs);
 
         //Draw hero
         SpriteImage.paint(g, p, hero);
 
+        //Draw hero dialogues
         hero.draw(g, p);
 
         //Draw dialogue

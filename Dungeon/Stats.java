@@ -14,6 +14,8 @@ public class Stats {
     private int currentAP;
     private int APLimit;
 
+    private int[] attackID = new int[4];
+
     //TODO: Add this here?
     //private int attackMoves;
 
@@ -22,7 +24,7 @@ public class Stats {
 
     }
 
-    public Stats(int[] stats) {
+    public Stats(int[] stats, int[] attacks) {
 
         this.level = stats[0];
 
@@ -31,6 +33,8 @@ public class Stats {
         this.currentHealth = this.healthLimit = stats[2];
 
         this.currentAP = this.APLimit = stats[3];
+
+        attackID = attacks;
     }
 
 
@@ -56,11 +60,11 @@ public class Stats {
 
             //TODO: Update this game mechanic later
             //Update expLimit
-            expLimit = (int) ((float) level * 1.1);
+            expLimit += (int) ((float) level * 1.1);
             //Update health
-            healthLimit = (int) ((float) level * 1.2);
+            healthLimit += (int) ((float) level * 1.2);
             //Update AP
-            APLimit = (int) ((float) level * 1.2);
+            APLimit += (int) ((float) level * 1.2);
         }
     }
 
@@ -127,5 +131,14 @@ public class Stats {
         return temp;
     }
 
+
+    //TODO: remove this test code
+    public void showStats() {
+
+        System.out.println("Level: " + level);
+        System.out.println("Health: Current: " + currentHealth + " Limit: " + healthLimit);
+        System.out.println("AP: Current: " + currentAP + " Limit: " + APLimit);
+        System.out.println("Exp: Current: " + currentExp + " Limit: " + expLimit);
+    }
 
 }

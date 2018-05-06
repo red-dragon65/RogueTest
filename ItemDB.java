@@ -5,8 +5,7 @@ import java.util.ArrayList;
 
 public class ItemDB {
 
-    private static ArrayList<String> name, description;
-    private static ArrayList<String> imageURL;
+    private static ArrayList<String> name, description, imageURL;
     private static ArrayList<Integer> ID, price;
     private static ArrayList<Integer> ap, hp, dmg;
 
@@ -65,7 +64,7 @@ public class ItemDB {
             description.add("Causes 50 damage. Range: 1 tile.");
             price.add(150);
             imageURL.add("../Assets/Other/Characters/purple.png");
-            ap.add(-10);
+            ap.add(-20);
             hp.add(0);
             dmg.add(150);
 
@@ -74,7 +73,7 @@ public class ItemDB {
             description.add("Fills your belly 50%.");
             price.add(200);
             imageURL.add("../Assets/Other/Characters/green.png");
-            ap.add(30);
+            ap.add(10);
             hp.add(5);
             dmg.add(0);
 

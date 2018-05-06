@@ -2,7 +2,9 @@ package RogueGame;
 
 //Allow drawing to panel.
 
+import RogueGame.Dungeon.AttackDB;
 import RogueGame.Dungeon.Dungeon;
+import RogueGame.Dungeon.EnemyDB;
 import RogueGame.Town.Town;
 
 import javax.swing.*;
@@ -24,6 +26,8 @@ public class Loop extends JPanel implements ActionListener {
 
     private final ItemDB DB = new ItemDB();
     private UserData data = new UserData();
+    private final EnemyDB enemyDB = new EnemyDB();
+    private final AttackDB ADB = new AttackDB();
 
     //Game loop
     private Timer gameLoop;
