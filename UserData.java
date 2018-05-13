@@ -8,6 +8,7 @@ public class UserData {
     private static int money;
     private static int[] stats;
     private static int[] attacks;
+    public final static int attackSize = 5;
 
     //TODO: add other user data
     //private static String[] Missions;
@@ -41,11 +42,12 @@ public class UserData {
             stats[2] = 100; //health
             stats[3] = 60; //ap
 
-            attacks = new int[4];
-            attacks[0] = 1;
-            attacks[1] = 2;
-            attacks[2] = 3;
-            attacks[3] = 4;
+            attacks = new int[attackSize];
+            attacks[0] = 0;
+            attacks[1] = 1;
+            attacks[2] = 2;
+            attacks[3] = 3;
+            attacks[4] = 4;
 
 
             init = false;

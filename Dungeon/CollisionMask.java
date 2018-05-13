@@ -81,13 +81,10 @@ public class CollisionMask {
             }
         }
 
-        if (attackID.size() > 0) {
-            System.out.println("Attack location: " + attackLocX.get(0) + " " + attackLocY.get(0));
-        }
-
         return false;
     }
 
+    //Return attack ID if sprite is overlapping attack data
     public int getAttack(int[] loc) {
 
         int temp = 0;

@@ -24,6 +24,13 @@ public class AttackDB {
             range = new ArrayList<>();
             ap = new ArrayList<>();
 
+            ID.add(0);
+            name.add("Default");
+            description.add("A weak punch.");
+            imageURL.add("");
+            dmg.add(5);
+            range.add(1);
+            ap.add(0);
 
             ID.add(1);
             name.add("Fire Ball");
@@ -46,8 +53,8 @@ public class AttackDB {
             description.add("Sticks and stones may break my bones, and words can sometimes hurt me.");
             imageURL.add("");
             dmg.add(10);
-            range.add(5);
-            ap.add(5);
+            range.add(4);
+            ap.add(10);
 
             ID.add(4);
             name.add("Thunder Beam");
@@ -119,9 +126,7 @@ public class AttackDB {
         return dmg.get(temp);
     }
 
-    public static int[] getValues(int id) {
-
-        int[] tempy = new int[3];
+    public static int getRange(int id) {
 
         int temp = 0;
 
@@ -132,11 +137,23 @@ public class AttackDB {
             }
         }
 
-        tempy[0] = dmg.get(temp);
-        tempy[1] = range.get(temp);
-        tempy[2] = ap.get(temp);
+        return range.get(temp);
 
-        return tempy;
+    }
+
+    public static int getAP(int id) {
+
+        int temp = 0;
+
+        for (int i = 0; i < ID.size(); i++) {
+            if (ID.get(i) == id) {
+                temp = i;
+                break;
+            }
+        }
+
+        return ap.get(temp);
+
     }
 
 

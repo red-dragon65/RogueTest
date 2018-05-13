@@ -27,7 +27,6 @@ public class DungeonHero extends SpriteImage {
     public Stats stats;
 
     //Dialogues
-    private boolean showMenu;
     private ActionMenu menu;
 
     //Stats GUI
@@ -45,7 +44,6 @@ public class DungeonHero extends SpriteImage {
         right = left = up = down = false;
         matLoc = new int[2];
 
-        showMenu = false;
         menu = new ActionMenu("dungeon");
 
         //Set hero stats
@@ -80,7 +78,7 @@ public class DungeonHero extends SpriteImage {
 
         setStatGUI();
 
-        if (showMenu && menu.isActive()) {
+        if (menu.isActive()) {
 
             //Run menu
             menu.run(in);
@@ -118,37 +116,37 @@ public class DungeonHero extends SpriteImage {
                 setStatGUI();
             }
 
-            if (menu.selectedAttackType > 0) {
+            if (menu.rangeSelected) {
 
 
-                System.out.println(menu.selectedAttackType + " " + menu.selectedAttackX + " " + menu.selectedAttackY);
+                int tempAttack = menu.selectedAttackType;
 
-
-                //TODO: LOAD RANGE DATA HERE!
-                int tempAttack = 3;
-
+                //Get attack offset
                 int x = mask.getHeroLoc()[1];
-                x++;
                 int y = mask.getHeroLoc()[0];
+                x += menu.selectedAttackX;
+                y += menu.selectedAttackY;
 
                 mask.addAttack(x, y, tempAttack);
                 done = true;
 
-                System.out.println("Attack has been set");
-                System.out.println("Hero Loc: " + x + " " + y);
+                menu.rangeSelected = false;
 
-                menu.selectedAttackType = -1;
+                if (tempAttack > 0) {
+                    stats.updateAP(-AttackDB.getAP(tempAttack));
+                }
             }
 
         } else {
 
 
-            if (in.checkInput("escape")) { //Check for inputs
+            if (in.checkInput("escape")) {
 
                 //Activate menu
                 in.bufferEsc();
-                showMenu = true;
                 menu.activate();
+                menu.setLoc(this.getX(), this.getY());
+                menu.setAP(stats.getAP()[0]);
 
             } else {
 
@@ -276,7 +274,7 @@ public class DungeonHero extends SpriteImage {
 
     public void draw(Graphics g, JPanel p) {
 
-        if (showMenu) {
+        if (menu.isActive()) {
             menu.draw(g, p);
         }
 

@@ -16,6 +16,7 @@ public class ActionMenu extends DialogueSelector {
     private static DialogueSelector attackSelector;
     private DialogueSelector options;
     private DialogueSelector money;
+    private RangeSelector rangeDialogue;
 
     //Dialogues
     private ynMenu selected;
@@ -27,8 +28,14 @@ public class ActionMenu extends DialogueSelector {
     public int selectedItem = -1;
 
     public int selectedAttackType = -1;
+    public boolean rangeSelected = false;
     public int selectedAttackX = 0;
     public int selectedAttackY = 0;
+
+    //Hero location to set range dialogue
+    private int[] heroLoc = new int[2];
+
+    private int apLeft = 0;
 
     //TODO: add dialogues for all actions
 
@@ -87,6 +94,7 @@ public class ActionMenu extends DialogueSelector {
             money.initializeList();
         }
 
+
         if (inventory.isActive()) {
 
             runInventory(in);
@@ -113,7 +121,6 @@ public class ActionMenu extends DialogueSelector {
 
             //Run this menu
             super.run(in);
-
 
         }
 
@@ -193,17 +200,15 @@ public class ActionMenu extends DialogueSelector {
         attackSelector = new DialogueSelector();
         attackSelector.title = "Moves";
 
-        attackSelector.allOptions.add(AttackDB.getName(UserData.getAttacks()[0]));
-        attackSelector.allOptions.add(AttackDB.getName(UserData.getAttacks()[1]));
-        attackSelector.allOptions.add(AttackDB.getName(UserData.getAttacks()[2]));
-        attackSelector.allOptions.add(AttackDB.getName(UserData.getAttacks()[3]));
+        for (int i = 0; i < UserData.attackSize; i++) {
+            attackSelector.allOptions.add(AttackDB.getName(UserData.getAttacks()[i]));
+            attackSelector.description.add(AttackDB.getDescription(UserData.getAttacks()[i]));
 
-        attackSelector.description.add(AttackDB.getDescription(UserData.getAttacks()[0]));
-        attackSelector.description.add(AttackDB.getDescription(UserData.getAttacks()[1]));
-        attackSelector.description.add(AttackDB.getDescription(UserData.getAttacks()[2]));
-        attackSelector.description.add(AttackDB.getDescription(UserData.getAttacks()[3]));
+        }
 
         attackSelector.initializeList();
+
+        rangeDialogue = new RangeSelector();
 
     }
 
@@ -300,22 +305,58 @@ public class ActionMenu extends DialogueSelector {
 
     public void runAttack(InputListener in) {
 
-        attackSelector.run(in);
 
-        if (in.checkInput("space")) {
+        if (rangeDialogue.isActive()) {
 
-            if (attackSelector.allOptions.size() > 0) {
+            rangeDialogue.run(in);
 
-                selectedAttackType = UserData.getAttacks()[attackSelector.selectorFlag];
+            //Stop
+            if (rangeDialogue.yes) {
 
                 attackSelector.reset(in);
+                rangeDialogue.reset();
                 this.reset(in);
-
-                //TODO: run range selector here
+                selectedAttackX = rangeDialogue.cursorLocX;
+                selectedAttackY = rangeDialogue.cursorLocY;
+                rangeSelected = true;
             }
 
-            in.bufferSpace();
+        } else {
+
+            attackSelector.run(in);
+
+            if (in.checkInput("space")) {
+
+                if (attackSelector.allOptions.size() > 0) {
+
+                    //Get attack type
+                    selectedAttackType = UserData.getAttacks()[attackSelector.selectorFlag];
+
+
+                    //Make sure their is enough ap for attack
+                    if (apLeft >= AttackDB.getAP(selectedAttackType)) {
+
+                        //Run range dialogue selector
+                        rangeDialogue.setRange(AttackDB.getRange(selectedAttackType), heroLoc);
+                        rangeDialogue.activate();
+                    }
+
+
+                }
+
+                in.bufferSpace();
+            }
         }
+    }
+
+    public void setAP(int ap) {
+        this.apLeft = ap;
+    }
+
+    public void setLoc(int x, int y) {
+
+        this.heroLoc[0] = x;
+        this.heroLoc[1] = y;
     }
 
     //Paint method
@@ -323,7 +364,10 @@ public class ActionMenu extends DialogueSelector {
 
         if (this.isActive()) {
 
-            super.draw(g, p);
+            if (!rangeDialogue.isActive()) {
+
+                super.draw(g, p);
+            }
 
             //Draw other dialogues
             if (inventory.isActive()) {
@@ -338,12 +382,16 @@ public class ActionMenu extends DialogueSelector {
                 selected.draw(g, p);
             }
 
-            if (money.isActive() && !inventory.isActive() && !attackSelector.isActive()) {
+            if (money.isActive() && !inventory.isActive() && !attackSelector.isActive() && !rangeDialogue.isActive()) {
                 money.draw(g, p);
             }
 
-            if (attackSelector.isActive()) {
+            if (attackSelector.isActive() && !rangeDialogue.isActive()) {
                 attackSelector.draw(g, p);
+            }
+
+            if (rangeDialogue.isActive()) {
+                rangeDialogue.draw(g, p);
             }
         }
     }

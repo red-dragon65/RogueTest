@@ -26,16 +26,10 @@ public class Enemy extends SpriteImage {
 
     public void setType(int ID) {
 
-        //TODO: get attacks from enemyDB
-        int[] tempy = new int[4];
-        tempy[0] = 2;
-        tempy[1] = 2;
-        tempy[2] = 3;
-        tempy[3] = 3;
 
         dead = false;
 
-        stats = new Stats(EnemyDB.getStats(ID), tempy);
+        stats = new Stats(EnemyDB.getStats(ID), EnemyDB.getAttacks(ID));
 
         this.setIMAGE(new ImageIcon(getClass().getResource(EnemyDB.getImage(ID))));
 
@@ -51,7 +45,7 @@ public class Enemy extends SpriteImage {
         //Take damage
         if (mask.checkAttack(mask.getEnemyLoc(index))) {
 
-            stats.updateHealth(-AttackDB.getDamage(mask.getAttack(mask.getEnemyLoc(index))));
+            stats.updateHealth(-(AttackDB.getDamage(mask.getAttack(mask.getEnemyLoc(index)))));
 
         }
 
