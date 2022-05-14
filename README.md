@@ -3,6 +3,9 @@
 This is a test game that explores creating a more advanced game using only Java.
 Currently, it is retired to being a demonstration that shows what level of scale a game can be created using only Java.
 
+### Warning
+- This project does not follow any *SOLID principles* or *Design patterns*. Traverse at your own risk!
+
 ### Project Setup
 - The project is split into two main parts. There is the `town` and `dungeon`. These are two different game environments with different game mechanics.
 
